@@ -36,7 +36,7 @@ public class Board implements ActionListener {
         windowContent.setLayout(gl);
         addAllButtons(windowContent);
         p1.add("Center", windowContent);
-        frame = new JFrame("Kalaha");
+        frame = new JFrame("Kalaha ui.Board");
         frame.setContentPane(p1);
         frame.pack();
         frame.setVisible(true);
