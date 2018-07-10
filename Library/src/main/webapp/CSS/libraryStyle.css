@@ -1,0 +1,47 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    font-size: 20px;
+    font-style: italic;
+    text-align: center;
+    color: #c2ff00;
+    background: #16a085;
+}
+
+
+
+table {
+    border-style: dotted;
+    border-style: inset;
+    border-color: #98bf21;
+}
+
+td, th, tr {
+
+    border-style: dotted;
+    border-style: inset;
+    border-color: #53bf06;
+
+}
+
+td {
+    padding: 20px;
+}
+
+a:active {
+    color: #e1ffff;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #c2ff00;
+}
+
+a:hover {
+    color: #FF00FF;
+    text-decoration: underline;
+}
+
+/*a:link {*/
+    /*background-color: rgba(107, 53, 108, 0.29);*/
+/*}*/
