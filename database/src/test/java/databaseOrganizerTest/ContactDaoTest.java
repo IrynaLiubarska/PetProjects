@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static junit.framework.TestCase.assertEquals;
 
@@ -21,8 +22,8 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class ContactDaoTest {
 
-    private ContactDao contactDaoImpl = new ContactDaoImpl(DeletePolicy.DELETE_NO_ACTION);
-    private PersonDao personDaoImpl = new PersonDaoImpl(DeletePolicy.DELETE_NO_ACTION);
+    private ContactDao contactDaoImpl = new ContactDaoImpl();
+    private PersonDao personDaoImpl = new PersonDaoImpl(DeletePolicy.DELETE_NO_ACTION, contactDaoImpl);
     private Person firstPerson;
     private Contact firstContact;
     private Contact secondContact;
@@ -31,8 +32,8 @@ public class ContactDaoTest {
 
     @Before
     public void removeAllRecords() throws IOException {
-        personDaoImpl.removeAll();
-        contactDaoImpl.removeAll();
+        personDaoImpl.deleteAll();
+        contactDaoImpl.deleteAll();
         firstPerson = new Person("liubarskyi", "dmytro", 26, "munich");
         firstContact = new Contact(0, ContactType.SKYPE, "ljubarskyj");
         secondContact = new Contact(0, ContactType.VIBER, "ljubarskyj");
@@ -58,13 +59,13 @@ public class ContactDaoTest {
         contactDaoImpl.getByPersonId(null);
     }
 
-//    @Test
-//    public void shouldGetListOfContactsByPersonId() {
-//        personDaoImpl.insert(firstPerson);
-//        contactDaoImpl.insert(firstContact);
-//        contactDaoImpl.insert(secondContact);
-//        assertEquals(asList(firstContactExpected, secondContactExpected), contactDaoImpl.getByPersonId(0));
-//    }
+    @Test
+    public void shouldGetListOfContactsByPersonId() {
+        personDaoImpl.insert(firstPerson);
+        contactDaoImpl.insert(firstContact);
+        contactDaoImpl.insert(secondContact);
+        assertEquals(asList(firstContactExpected, secondContactExpected), contactDaoImpl.getByPersonId(0));
+    }
 
     @Test(expected = RuntimeException.class)
     public void shouldThrowExceptionWhenDoNotExistAppropriatePersonId() {

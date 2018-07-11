@@ -11,16 +11,22 @@ public class ContactFileManager {
 
     private final static String CONTACT_FILE = "C:\\Users\\Iryna\\Desktop\\contactData.txt";
 
-    public String readById(String wantedId) throws IOException {
+    public String readById(Integer wantedId) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(CONTACT_FILE))) {
-            String currentLine;
-            while ((currentLine = br.readLine()) != null) {
-                String[] line = currentLine.split(",");
-                String id = line[0];
-                if (id.equals(wantedId)) {
-                    return currentLine;
+            try {
+                String currentLine;
+                while ((currentLine = br.readLine()) != null) {
+                    String[] line = currentLine.split(",");
+                    String id = line[0];
+                    if (id.equals(wantedId.toString())) {
+                        return currentLine;
+                    }
                 }
+            } catch (IOException e) {
+                throw new RuntimeException("Failed reading by id");
             }
+        }catch (IOException e) {
+           throw new FileNotFoundException("Can not connect to file");
         }
         return null;
     }
@@ -54,6 +60,7 @@ public class ContactFileManager {
             bufferedWriter.newLine();
         }
     }
+
     public void makeEmpty() throws IOException {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(CONTACT_FILE, false))) {
             bufferedWriter.write("");

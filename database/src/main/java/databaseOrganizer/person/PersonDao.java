@@ -13,7 +13,7 @@ public interface PersonDao {
     
     List<Person> getBySurname(String surname);
     
-    void removeAll();
+    void deleteAll();
     
     void delete(Integer personId);
     

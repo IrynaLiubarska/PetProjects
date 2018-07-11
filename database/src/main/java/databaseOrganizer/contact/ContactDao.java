@@ -11,7 +11,7 @@ public interface ContactDao {
 
     List<Contact> getByPersonId(Integer personId);
 
-    void removeAll();
+    void deleteAll();
     
     void deleteById(Integer id);
     

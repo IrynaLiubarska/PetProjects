@@ -1,5 +1,6 @@
 package databaseOrganizer.person;
 
+import databaseOrganizer.contact.ContactDao;
 import databaseOrganizer.delete.DeleteFactory;
 import databaseOrganizer.delete.DeletePolicy;
 import databaseOrganizer.delete.Deleter;
@@ -19,10 +20,11 @@ public class PersonDaoImpl implements PersonDao {
     private int counter = 0; // TODO read from file on startup
     private Deleter deleter;
 
-    public PersonDaoImpl(DeletePolicy deletePolicy){
-        deleter = DeleteFactory.createDeleter(deletePolicy);
+    public PersonDaoImpl(DeletePolicy deletePolicy, ContactDao contactDao) {
+        deleter = DeleteFactory.createDeleter(deletePolicy, contactDao);
+//        getLargestId();
     }
-    
+
     @Override
     public void insert(@NonNull Person person) {
         if (person.getId() == null) {
@@ -32,7 +34,7 @@ public class PersonDaoImpl implements PersonDao {
             } catch (IOException e) {
                 throw new RuntimeException("Failed to insert");
             }
-        }else{
+        } else {
             throw new IllegalArgumentException("person id should be null");
         }
     }
@@ -61,7 +63,7 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
-    public void removeAll() {
+    public void deleteAll() {
         try {
             personFileManager.makeEmpty();
         } catch (IOException e) {
@@ -70,14 +72,27 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
-    public void delete(Integer personId) {
+    public void delete(Integer personId)  {
         deleter.delete(personId);
-
-        // remove person from file
+        deletePerson(personId);
     }
+
+//    private Integer getLargestId(){
+//        try {
+//           counter = personFileManager.readLargestId(counter);
+//        } catch (IOException e) {
+//            throw new RuntimeException("Failed by getting largest id");
+//        }
+//        return counter;
+//    }
     
-    private void removePerson(Integer personId){
+    private void deletePerson(Integer personId) {
         try {
+            try {
+                personFileManager.readById(personId);
+            } catch (IOException e) {
+                throw new RuntimeException(personId + "Failed to find this person id");
+            }
             personFileManager.writeToFile(Integer.toString(personId) + ", DELETE");
         } catch (IOException e) {
             throw new RuntimeException("Failed to delete person");

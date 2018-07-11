@@ -1,6 +1,7 @@
 package databaseOrganizerTest;
 
 
+import databaseOrganizer.contact.ContactDaoImpl;
 import databaseOrganizer.delete.DeletePolicy;
 import databaseOrganizer.person.Person;
 import databaseOrganizer.person.PersonDao;
@@ -19,7 +20,7 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class PersonDaoTest {
 
-    private PersonDao personDaoImpl = new PersonDaoImpl(DeletePolicy.DELETE_NO_ACTION);
+    private PersonDao personDaoImpl = new PersonDaoImpl(DeletePolicy.DELETE_NO_ACTION, new ContactDaoImpl());
     private Person firstPerson;
     private Person secondPerson;
     private Person thirdPerson;
@@ -29,7 +30,7 @@ public class PersonDaoTest {
 
     @Before
     public void removeAllRecords() throws IOException {
-        personDaoImpl.removeAll();
+        personDaoImpl.deleteAll();
         firstPerson = new Person("liubarskyi", "dmytro", 26, "munich");
         secondPerson = new Person("liubarska", "iryna", 29, "munich");
         thirdPerson = new Person("liubarska", "kateryna", 31, "kyiv");

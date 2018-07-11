@@ -1,9 +1,6 @@
 package databaseOrganizer.contact;
 
-import databaseOrganizer.delete.DeleteFactory;
-import databaseOrganizer.delete.DeletePolicy;
-import databaseOrganizer.delete.Deleter;
-import databaseOrganizer.person.PersonDaoImpl;
+import databaseOrganizer.person.PersonDao;
 import lombok.NonNull;
 
 import java.io.IOException;
@@ -16,24 +13,17 @@ import java.util.NoSuchElementException;
  */
 public class ContactDaoImpl implements ContactDao {
 
-    private PersonDaoImpl personDao;
+    private PersonDao personDao;
+
     private ContactFileManager contactFileManager = new ContactFileManager();
     private ContactSerializer contactSerializer = new ContactSerializer();
     private ContactDeserializer contactDeserializer = new ContactDeserializer();
     private static int counter = 0;
-    private Deleter deleter;
-
-    public ContactDaoImpl(DeletePolicy deletePolicy) {
-        personDao = new PersonDaoImpl(deletePolicy);
-        DeleteFactory deleteFactory = new DeleteFactory();
-        deleter = deleteFactory.createDeleter(deletePolicy);
-    }
-
     @Override
     public void insert(@NonNull Contact contact) {
         Integer personId = contact.getPersonId();
         try {
-            personDao.getById(personId); 
+            personDao.getById(personId);
             String record = createTransactionLine(contact);
             try {
                 contactFileManager.writeToFile(record);
@@ -60,7 +50,7 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public void removeAll() {
+    public void deleteAll() {
         try {
             contactFileManager.makeEmpty();
         } catch (IOException e) {
@@ -70,16 +60,34 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public void deleteById(Integer id) {
-        
+        try {
+            try {
+                contactFileManager.readById(id);
+            } catch (IOException e) {
+                throw new RuntimeException(id + "Failed to find this contact id");
+            }
+            contactFileManager.writeToFile(Integer.toString(id) + ", DELETE");
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete contact");
+        }
     }
 
     @Override
     public void deleteByPersonId(Integer personId) {
-
+        List<Contact> contactList = getByPersonId(personId);
+        if (!contactList.isEmpty()) {
+            for (Contact contact : contactList) {
+                deleteById(contact.getId());
+            }
+        }
     }
 
     private String createTransactionLine(Contact contact) {
         contact.setId(counter++);
         return contactSerializer.serialize(contact);
+    }
+
+    public void setPersonDao(PersonDao personDao) {
+        this.personDao = personDao;
     }
 }

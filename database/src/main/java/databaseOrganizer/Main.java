@@ -14,10 +14,11 @@ import java.io.IOException;
 public class Main {
 
     private static ConsoleReader consoleReader = new ConsoleReader();
-    private static PersonDaoImpl personDao = new PersonDaoImpl(DeletePolicy.DELETE_NO_ACTION);
-    private static ContactDaoImpl contactDao = new ContactDaoImpl(DeletePolicy.DELETE_NO_ACTION);
+    private static ContactDaoImpl contactDao = new ContactDaoImpl();
+    private static PersonDaoImpl personDao = new PersonDaoImpl(DeletePolicy.DELETE_NO_ACTION, contactDao);
 
     public static void main(String[] args) throws IOException {
+        contactDao.setPersonDao(personDao);
         Person person = consoleReader.readPerson();
         personDao.insert(person);
         Contact contact = consoleReader.readContact();
