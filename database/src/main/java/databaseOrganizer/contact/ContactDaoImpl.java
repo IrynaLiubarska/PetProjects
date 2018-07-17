@@ -3,10 +3,8 @@ package databaseOrganizer.contact;
 import databaseOrganizer.person.PersonDao;
 import lombok.NonNull;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * Created by Iryna on 04.07.2018.
@@ -18,30 +16,24 @@ public class ContactDaoImpl implements ContactDao {
     private ContactFileManager contactFileManager = new ContactFileManager();
     private ContactSerializer contactSerializer = new ContactSerializer();
     private ContactDeserializer contactDeserializer = new ContactDeserializer();
-    private static int counter = 0;
+    private static Integer currentId;
+
+    public ContactDaoImpl() {
+        currentId = contactFileManager.readLargestId() + 1;
+    }
+
     @Override
     public void insert(@NonNull Contact contact) {
         Integer personId = contact.getPersonId();
-        try {
-            personDao.getById(personId);
-            String record = createTransactionLine(contact);
-            try {
-                contactFileManager.writeToFile(record);
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to insert");
-            }
-        } catch (Exception e) {
-            throw new NoSuchElementException("Failed to insert contact because no such person is exist");
-        }
+        personDao.getById(personId);
+        String record = createTransactionLine(contact);
+        contactFileManager.writeToFile(record);
     }
 
     @Override
     public List<Contact> getByPersonId(@NonNull Integer id) {
         List<Contact> contactList = new ArrayList<>();
         List<String> transactionLine = contactFileManager.readByPersonId(Integer.toString(id));
-        if (transactionLine.isEmpty()) {
-            throw new RuntimeException();
-        }
         for (String str : transactionLine) {
             Contact contact = contactDeserializer.deserialize(str);
             contactList.add(contact);
@@ -51,25 +43,14 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public void deleteAll() {
-        try {
-            contactFileManager.makeEmpty();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to remove all elements");
-        }
+        contactFileManager.makeEmpty();
+        currentId = 0;
     }
 
     @Override
     public void deleteById(Integer id) {
-        try {
-            try {
-                contactFileManager.readById(id);
-            } catch (IOException e) {
-                throw new RuntimeException(id + "Failed to find this contact id");
-            }
-            contactFileManager.writeToFile(Integer.toString(id) + ", DELETE");
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to delete contact");
-        }
+        contactFileManager.readById(id);
+        contactFileManager.writeToFile(Integer.toString(id) + ", DELETE");
     }
 
     @Override
@@ -83,11 +64,12 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     private String createTransactionLine(Contact contact) {
-        contact.setId(counter++);
+        contact.setId(currentId++);
         return contactSerializer.serialize(contact);
     }
 
     public void setPersonDao(PersonDao personDao) {
         this.personDao = personDao;
     }
+
 }
