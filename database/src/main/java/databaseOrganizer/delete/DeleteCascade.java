@@ -15,6 +15,5 @@ public class DeleteCascade implements Deleter {
 
     @Override
     public void delete(Integer personId) {
-        contactDao.getByPersonId(personId);
-    }
+        contactDao.deleteByPersonId(personId);    }
 }
