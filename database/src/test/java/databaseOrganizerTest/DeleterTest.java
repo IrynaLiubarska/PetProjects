@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.fail;
 
 /**
@@ -38,7 +39,7 @@ public class DeleterTest {
         contactDao.deleteAll();
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void shouldDeleteFirstPerson() {
         personDao = new PersonDaoImpl(DeletePolicy.DELETE_NO_ACTION, contactDao);
         contactDao.setPersonDao(personDao);
@@ -49,7 +50,7 @@ public class DeleterTest {
         contactDao.insert(secondContact);
 
         personDao.delete(firstPerson.getId());
-        personDao.getById(firstPerson.getId());
+        assertNull(personDao.getById(firstPerson.getId()));
     }
 
     @Test
@@ -79,11 +80,8 @@ public class DeleterTest {
 
         personDao.insert(firstPerson);
         personDao.delete(firstPerson.getId());
-        try {
-            personDao.getById(firstPerson.getId());
-            fail();
-        } catch (RuntimeException e) {
-        }
+        
+        assertNull(personDao.getById(firstPerson.getId()));
     }
 
     @Test
@@ -95,13 +93,9 @@ public class DeleterTest {
         personDao.insert(firstPerson);
         contactDao.insert(firstContact);
         contactDao.insert(secondContact);
-
         personDao.delete(firstPerson.getId());
-        try {
-            personDao.getById(firstPerson.getId());
-            fail();
-        } catch (RuntimeException e) {
-        }
+
+        assertNull(personDao.getById(firstPerson.getId()));
         assertEquals(new ArrayList<>(), contactDao.getByPersonId(firstPerson.getId()));
     }
 }

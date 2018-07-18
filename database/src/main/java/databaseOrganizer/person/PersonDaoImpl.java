@@ -19,10 +19,10 @@ public class PersonDaoImpl implements PersonDao {
     private Integer currentId;
     private Deleter deleter;
 
-    public PersonDaoImpl(){
+    public PersonDaoImpl() {
         this(DeletePolicy.DELETE_NO_ACTION, null);
     }
-    
+
     public PersonDaoImpl(DeletePolicy deletePolicy, ContactDao contactDao) {
         deleter = DeleteFactory.createDeleter(deletePolicy, contactDao);
         currentId = personFileManager.readLargestId() + 1;
@@ -41,8 +41,8 @@ public class PersonDaoImpl implements PersonDao {
     @Override
     public Person getById(@NonNull Integer id) {
         String line = personFileManager.readById(id);
-        if (line.isEmpty()) {
-            throw new RuntimeException("The record is empty");
+        if (line==null) {
+            return null;
         }
         return personDeserializer.deserialize(line);
     }

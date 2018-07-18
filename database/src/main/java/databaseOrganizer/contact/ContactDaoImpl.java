@@ -25,7 +25,9 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public void insert(@NonNull Contact contact) {
         Integer personId = contact.getPersonId();
-        personDao.getById(personId);
+        if (personDao.getById(personId) == null) {
+            throw new RuntimeException("there is no person with this id");
+        }
         String record = createTransactionLine(contact);
         contactFileManager.writeToFile(record);
     }

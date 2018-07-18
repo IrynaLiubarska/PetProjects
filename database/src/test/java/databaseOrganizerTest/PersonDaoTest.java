@@ -14,6 +14,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
 
 /**
  * Created by Iryna on 04.07.2018.
@@ -69,9 +70,9 @@ public class PersonDaoTest {
         personDao.getById(null);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void shouldThrowExceptionIfThereIsNoSuchId() {
-        personDao.getById(0);
+    @Test
+    public void shouldReturnNullIfThereIsNoSuchId() {
+        assertNull(personDao.getById(0));
     }
 
     @Test
@@ -111,19 +112,23 @@ public class PersonDaoTest {
         personDao.getBySurname(null);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void shouldDeletePerson() {
         personDao.insert(firstPerson);
         personDao.delete(firstPerson.getId());
-        personDao.getById(firstPerson.getId());
+        assertNull(personDao.getById(firstPerson.getId()));
     }
 
-//    @Test
-//    public void shouldDeleteAllPeople() {
-//        personDao.insert(firstPerson);
-//        personDao.insert(secondPerson);
-//        personDao.insert(thirdPerson);
-//
-//        personDao.deleteAll();
-//    }
+    @Test
+    public void shouldDeleteAllPeople() {
+        personDao.insert(firstPerson);
+        personDao.insert(secondPerson);
+        personDao.insert(thirdPerson);
+
+        personDao.deleteAll();
+
+        assertNull(personDao.getById(firstPerson.getId()));
+        assertNull(personDao.getById(secondPerson.getId()));
+        assertNull(personDao.getById(thirdPerson.getId()));
+    }
 }

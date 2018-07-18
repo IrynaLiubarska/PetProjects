@@ -22,7 +22,7 @@ public class PersonFileManager {
                 if (id.equals(Integer.toString(personId))) {
                     finalResultOfCurrentLine = currentLine;
                     if (line[1].equals("DELETE")) {
-                        throw new RuntimeException("The person with this id was deleted");
+                       return null;
                     }
                 }
             }
