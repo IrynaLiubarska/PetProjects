@@ -60,12 +60,12 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
-    public void delete(Integer personId) {
+    public void delete(@NonNull Integer personId) {
         deleter.delete(personId);
         deletePerson(personId);
     }
 
-    private void deletePerson(Integer personId) {
+    private void deletePerson(@NonNull Integer personId) {
         personFileManager.readById(personId);
         personFileManager.writeToFile(Integer.toString(personId) + ", DELETE");
     }

@@ -9,8 +9,10 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertEquals;
 
 /**
@@ -90,12 +92,9 @@ public class PersonDaoTest {
         personDao.insert(secondPerson);
         personDao.insert(thirdPerson);
 
-        List<Person> personListBySurname = personDao.getBySurname(secondPerson.getSurname());
-
-        List<Person> expectedPersonListBySurname = new ArrayList<>();
-        expectedPersonListBySurname.add(expectedSecondPerson);
-        expectedPersonListBySurname.add(expectedThirdPerson);
-        assertEquals(expectedPersonListBySurname, personListBySurname);
+        Collection<Person> personListBySurname = personDao.getBySurname(secondPerson.getSurname());
+        
+        assertEquals(asList(expectedSecondPerson, expectedThirdPerson), personListBySurname);
     }
 
     @Test

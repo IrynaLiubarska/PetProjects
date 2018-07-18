@@ -48,14 +48,14 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    public void deleteById(Integer id) {
-       String line = contactFileManager.readById(id);
+    public void deleteById(@NonNull Integer id) {
+        String line = contactFileManager.readById(id);
         Contact contact = contactDeserializer.deserialize(line);
         contactFileManager.writeToFile(Integer.toString(id) + ", " + contact.getPersonId() + ", DELETE");
-    } 
+    }
 
     @Override
-    public void deleteByPersonId(Integer personId) {
+    public void deleteByPersonId(@NonNull Integer personId) {
         List<Contact> contactList = getByPersonId(personId);
         if (!contactList.isEmpty()) {
             for (Contact contact : contactList) {

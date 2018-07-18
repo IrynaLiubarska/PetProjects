@@ -1,15 +1,14 @@
 package databaseOrganizerTest;
 
 import databaseOrganizer.contact.Contact;
+import databaseOrganizer.contact.ContactDao;
 import databaseOrganizer.contact.ContactDaoImpl;
 import databaseOrganizer.contact.ContactType;
-import databaseOrganizer.delete.DeletePolicy;
 import databaseOrganizer.person.Person;
+import databaseOrganizer.person.PersonDao;
 import databaseOrganizer.person.PersonDaoImpl;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -20,9 +19,9 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class ContactDaoTest {
 
-    private ContactDaoImpl contactDaoImpl = new ContactDaoImpl();
-    private PersonDaoImpl personDaoImpl = new PersonDaoImpl(DeletePolicy.DELETE_NO_ACTION, contactDaoImpl);
-    
+    private ContactDao contactDao;
+    private PersonDao personDao;
+
     private Person firstPerson;
     private Contact firstContact;
     private Contact secondContact;
@@ -30,10 +29,21 @@ public class ContactDaoTest {
     private Contact secondContactExpected;
 
     @Before
-    public void removeAllRecords() throws IOException {
-        contactDaoImpl.setPersonDao(personDaoImpl);
-        personDaoImpl.deleteAll();
-        contactDaoImpl.deleteAll();
+    public void removeAllRecords() {
+        prepareDao();
+        prepareTestData();
+    }
+
+    private void prepareDao() {
+        personDao = new PersonDaoImpl();
+        personDao.deleteAll();
+
+        contactDao = new ContactDaoImpl();
+        ((ContactDaoImpl) contactDao).setPersonDao(personDao);
+        contactDao.deleteAll();
+    }
+
+    private void prepareTestData() {
         firstPerson = new Person("liubarskyi", "dmytro", 26, "munich");
         firstContact = new Contact(0, ContactType.SKYPE, "ljubarskyj");
         secondContact = new Contact(0, ContactType.VIBER, "ljubarskyj");
@@ -43,40 +53,34 @@ public class ContactDaoTest {
 
     @Test
     public void shouldInsertContactToDatabase() {
-        personDaoImpl.insert(firstPerson);
-        contactDaoImpl.insert(firstContact);
-        assertEquals(singletonList(firstContactExpected), contactDaoImpl.getByPersonId(firstPerson.getId()));
+        personDao.insert(firstPerson);
+        contactDao.insert(firstContact);
+
+        assertEquals(singletonList(firstContactExpected), contactDao.getByPersonId(firstPerson.getId()));
     }
 
     @Test(expected = NullPointerException.class)
-    public void shouldThrowExceptionByInsertionNull() {
-        personDaoImpl.insert(firstPerson);
-        contactDaoImpl.insert(null);
+    public void shouldThrowExceptionWhenInsertingNull() {
+        contactDao.insert(null);
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowExceptionWhenGetNullPersonId() {
-        contactDaoImpl.getByPersonId(null);
+        contactDao.getByPersonId(null);
     }
 
     @Test
     public void shouldGetListOfContactsByPersonId() {
-        personDaoImpl.insert(firstPerson);
-        contactDaoImpl.insert(firstContact);
-        contactDaoImpl.insert(secondContact);
-        assertEquals(asList(firstContactExpected, secondContactExpected), contactDaoImpl.getByPersonId(firstPerson.getId()));
+        personDao.insert(firstPerson);
+        contactDao.insert(firstContact);
+        contactDao.insert(secondContact);
+
+        assertEquals(asList(firstContactExpected, secondContactExpected), contactDao.getByPersonId(firstPerson.getId()));
     }
 
     @Test(expected = RuntimeException.class)
-    public void shouldThrowExceptionWhenDoNotExistAppropriatePersonId() {
-        contactDaoImpl.insert(firstContact);
-    }
-
-
-    @Test(expected = NullPointerException.class)
-    public void shouldThrowExceptionWhenPersonIdIsNull() {
-        Contact contact = new Contact(null, ContactType.SKYPE, "ljubarskyj");
-        contactDaoImpl.insert(contact);
+    public void shouldThrowExceptionWhenPersonDoesNotExists() {
+        contactDao.insert(firstContact);
     }
 }
 

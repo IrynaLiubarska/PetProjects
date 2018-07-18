@@ -9,7 +9,6 @@ import databaseOrganizer.person.PersonDaoImpl;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.naming.NoPermissionException;
 import java.util.ArrayList;
 
 import static junit.framework.TestCase.assertEquals;
@@ -32,9 +31,9 @@ public class DeleterTest {
         firstContact = new Contact(0, ContactType.SKYPE, "ljubarskyj");
         secondContact = new Contact(0, ContactType.VIBER, "ljubarskyj");
     }
-    
+
     @Before
-    public void deleteAllContactRecords(){
+    public void deleteAllContactRecords() {
         contactDao = new ContactDaoImpl();
         contactDao.deleteAll();
     }
@@ -54,30 +53,30 @@ public class DeleterTest {
     }
 
     @Test
-    public void shouldNotDeleteFirstPersonBecauseOfExistingContactByRestrictedDeletePolicy() throws NoPermissionException {
+    public void shouldNotDeleteFirstPersonBecauseOfExistingContactByRestrictedDeletePolicy() {
         personDao = new PersonDaoImpl(DeletePolicy.DELETE_RESTRICT, contactDao);
         contactDao.setPersonDao(personDao);
         personDao.deleteAll();
-        
+
         personDao.insert(firstPerson);
         contactDao.insert(firstContact);
         contactDao.insert(secondContact);
-      
+
         try {
             personDao.delete(firstPerson.getId());
             fail();
         } catch (RuntimeException e) {
         }
-        
+
         assertEquals(new Person(0, "liubarskyi", "dmytro", 26, "munich"), personDao.getById(firstPerson.getId()));
     }
 
     @Test
-    public void shouldDeleteFirstPersonWithNoExistingContactByRestrictedDeletePolicy() throws NoPermissionException {
+    public void shouldDeleteFirstPersonWithNoExistingContactByRestrictedDeletePolicy() {
         personDao = new PersonDaoImpl(DeletePolicy.DELETE_RESTRICT, contactDao);
         contactDao.setPersonDao(personDao);
         personDao.deleteAll();
-        
+
         personDao.insert(firstPerson);
         personDao.delete(firstPerson.getId());
         try {
@@ -88,11 +87,11 @@ public class DeleterTest {
     }
 
     @Test
-    public void shouldDeletePersonAndAllContactsCascade() throws NoPermissionException {
+    public void shouldDeletePersonAndAllContactsCascade() {
         personDao = new PersonDaoImpl(DeletePolicy.DELETE_CASCADE, contactDao);
         contactDao.setPersonDao(personDao);
         personDao.deleteAll();
-        
+
         personDao.insert(firstPerson);
         contactDao.insert(firstContact);
         contactDao.insert(secondContact);
