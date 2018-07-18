@@ -5,12 +5,12 @@ package databaseOrganizer.contact;
  */
 public class ContactDeserializer {
 
-    public Contact deserialize(String lineOfTranscription) {
-        String[] contactTranscription = lineOfTranscription.split(", ");
-        Integer primaryKey = Integer.parseInt(contactTranscription[0]);
-        Integer foreignKey = Integer.parseInt(contactTranscription[1]);
-        ContactType contactType = ContactType.valueOf(contactTranscription[2]);
-        String value= contactTranscription[3];
-        return new Contact(primaryKey, foreignKey, contactType, value);
+    public Contact deserialize(String record) {
+        String[] fields = record.split(", ");
+        Integer id = Integer.parseInt(fields[0]);
+        Integer personId = Integer.parseInt(fields[1]);
+        ContactType contactType = ContactType.valueOf(fields[2]);
+        String value = fields[3];
+        return new Contact(id, personId, contactType, value);
     }
 }

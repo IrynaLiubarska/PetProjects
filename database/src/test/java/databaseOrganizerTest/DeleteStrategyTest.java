@@ -18,7 +18,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by Iryna on 10.07.2018.
  */
-public class DeleterTest {
+public class DeleteStrategyTest {
 
     private Person firstPerson;
     private Contact firstContact;

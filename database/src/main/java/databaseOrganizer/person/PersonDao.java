@@ -16,5 +16,4 @@ public interface PersonDao {
     void deleteAll();
 
     void delete(Integer personId);
-
 }

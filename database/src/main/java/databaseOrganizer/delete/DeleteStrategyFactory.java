@@ -7,9 +7,9 @@ import java.util.NoSuchElementException;
 /**
  * Created by Iryna on 09.07.2018.
  */
-public class DeleteFactory {
+public class DeleteStrategyFactory {
 
-    public static Deleter createDeleter(DeletePolicy deletePolicy, ContactDao contactDao) {
+    public static DeleteStrategy create(DeletePolicy deletePolicy, ContactDao contactDao) {
         if (deletePolicy.equals(DeletePolicy.DELETE_RESTRICT)) {
             return new DeleteRestrict(contactDao);
         } else if (deletePolicy.equals(DeletePolicy.DELETE_NO_ACTION)) {
@@ -20,5 +20,4 @@ public class DeleteFactory {
             throw new NoSuchElementException("there is no delete policy");
         }
     }
-
 }

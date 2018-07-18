@@ -18,5 +18,4 @@ public class Person {
     private Integer age;
     @NonNull
     private String city;
-
 }

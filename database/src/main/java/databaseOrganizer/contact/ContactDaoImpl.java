@@ -28,19 +28,19 @@ public class ContactDaoImpl implements ContactDao {
         if (personDao.getById(personId) == null) {
             throw new RuntimeException("there is no person with this id");
         }
-        String record = createTransactionLine(contact);
+        String record = createRecord(contact);
         contactFileManager.writeToFile(record);
     }
 
     @Override
     public List<Contact> getByPersonId(@NonNull Integer id) {
-        List<Contact> contactList = new ArrayList<>();
-        List<String> transactionLine = contactFileManager.readByPersonId(Integer.toString(id));
-        for (String str : transactionLine) {
-            Contact contact = contactDeserializer.deserialize(str);
-            contactList.add(contact);
+        List<Contact> contacts = new ArrayList<>();
+        List<String> records = contactFileManager.readByPersonId(Integer.toString(id));
+        for (String record : records) {
+            Contact contact = contactDeserializer.deserialize(record);
+            contacts.add(contact);
         }
-        return contactList;
+        return contacts;
     }
 
     @Override
@@ -51,22 +51,22 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public void deleteById(@NonNull Integer id) {
-        String line = contactFileManager.readById(id);
-        Contact contact = contactDeserializer.deserialize(line);
-        contactFileManager.writeToFile(Integer.toString(id) + ", " + contact.getPersonId() + ", DELETE");
+        String record = contactFileManager.readById(id);
+        Contact contact = contactDeserializer.deserialize(record);
+        contactFileManager.writeToFile(Integer.toString(id) + ", " + contact.getPersonId() + ", DELETE"); // TODO
     }
 
     @Override
     public void deleteByPersonId(@NonNull Integer personId) {
-        List<Contact> contactList = getByPersonId(personId);
-        if (!contactList.isEmpty()) {
-            for (Contact contact : contactList) {
+        List<Contact> contacts = getByPersonId(personId);
+        if (!contacts.isEmpty()) {
+            for (Contact contact : contacts) {
                 deleteById(contact.getId());
             }
         }
     }
 
-    private String createTransactionLine(Contact contact) {
+    private String createRecord(Contact contact) {
         contact.setId(currentId++);
         return contactSerializer.serialize(contact);
     }
@@ -74,5 +74,4 @@ public class ContactDaoImpl implements ContactDao {
     public void setPersonDao(PersonDao personDao) {
         this.personDao = personDao;
     }
-
 }

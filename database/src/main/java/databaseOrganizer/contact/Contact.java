@@ -10,6 +10,7 @@ import lombok.*;
 @EqualsAndHashCode
 @Getter
 public class Contact {
+    
     @Setter
     private Integer id;
     @NonNull
@@ -18,6 +19,5 @@ public class Contact {
     private ContactType contactType;
     @NonNull
     private String value;
-
 }
 

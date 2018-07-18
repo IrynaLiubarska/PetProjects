@@ -14,46 +14,46 @@ public class ContactFileManager {
     private final static String CONTACT_FILE = "C:\\Users\\Iryna\\Desktop\\contactData.txt";
 
     public String readById(Integer wantedId) {
-        String finalResultOfCurrentLine = null;
+        String record = null;
         try (BufferedReader br = new BufferedReader(new FileReader(CONTACT_FILE))) {
             try {
-                String currentLine;
-                while ((currentLine = br.readLine()) != null) {
-                    String[] line = currentLine.split(",");
-                    String id = line[0];
+                String currentRecord;
+                while ((currentRecord = br.readLine()) != null) {
+                    String[] fields = currentRecord.split(",");
+                    String id = fields[0];
                     if (id.equals(wantedId.toString())) {
-                        finalResultOfCurrentLine = currentLine;
-                        checkIfDelete(line[2]);
+                        record = currentRecord;
+                        checkIfDelete(fields);
                     }
                 }
             } catch (IOException e) {
-                throw new RuntimeException(wantedId + "Failed reading by id");
+                throw new RuntimeException(wantedId + " Failed reading by id");
             }
         } catch (IOException e) {
-            throw new RuntimeException("Can not connect to file");
+            throw new RuntimeException("Can not read file");
         }
-        return finalResultOfCurrentLine;
+        return record;
     }
 
-    private void checkIfDelete(String s) {
-        if (s.equals("DELETE")) {
+    private void checkIfDelete(String[] fields) {
+        if (fields[2].equals("DELETE")) {
             throw new RuntimeException("The contact with this id was deleted");
         }
     }
 
     public List<String> readByPersonId(String wantedPersonId) {
-        Map<String, String> contactIdToPersonalDataLine = new HashMap<>();
-        List<String> linesOfPersonalDataBySurname = new ArrayList<>();
+        Map<String, String> contactIdToPersonalRecord = new HashMap<>();
+        List<String> records = new ArrayList<>();
         try {
             try (BufferedReader br = new BufferedReader(new FileReader(CONTACT_FILE))) {
-                String currentLine;
+                String currentRecord;
                 try {
-                    while ((currentLine = br.readLine()) != null) {
-                        String[] line = currentLine.split(", ");
-                        addToMapIfExist(wantedPersonId, contactIdToPersonalDataLine, currentLine, line);
-                        removeFromMapIfDelete(contactIdToPersonalDataLine, line);
+                    while ((currentRecord = br.readLine()) != null) {
+                        String[] record = currentRecord.split(", ");
+                        addToMapIfExist(wantedPersonId, contactIdToPersonalRecord, currentRecord, record);
+                        removeFromMapIfDelete(contactIdToPersonalRecord, record);
                     }
-                    linesOfPersonalDataBySurname.addAll(contactIdToPersonalDataLine.values());
+                    records.addAll(contactIdToPersonalRecord.values());
                 } catch (IOException e) {
                     throw new RuntimeException("Failed reading by person id");
                 }
@@ -61,36 +61,35 @@ public class ContactFileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return linesOfPersonalDataBySurname;
+        return records;
     }
 
-    private void addToMapIfExist(String wantedPersonId, Map<String, String> contactIdToPersonalDataLine, String currentLine, String[] line) {
-        String personId = line[1];
+    private void addToMapIfExist(String wantedPersonId, Map<String, String> contactIdToPersonalRecord, String currentRecord, String[] fields) {
+        String personId = fields[1];
         if (personId.equals(wantedPersonId)) {
-            String contactId = line[0];
-            contactIdToPersonalDataLine.put(contactId, currentLine);
+            String contactId = fields[0];
+            contactIdToPersonalRecord.put(contactId, currentRecord);
         }
     }
 
-    private void removeFromMapIfDelete(Map<String, String> contactIdToPersonalDataLine, String[] line) {
-        String deleteGap = line[2];
-        if (deleteGap.equals("DELETE")) {
-            contactIdToPersonalDataLine.remove(line[0]);
+    private void removeFromMapIfDelete(Map<String, String> contactIdToPersonalRecord, String[] fields) {
+        if (fields[2].equals("DELETE")) {
+            contactIdToPersonalRecord.remove(fields[0]);
         }
     }
 
-    public void writeToFile(String transcription) {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(CONTACT_FILE, true))) {
-            bufferedWriter.write(transcription);
-            bufferedWriter.newLine();
+    public void writeToFile(String record) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CONTACT_FILE, true))) {
+            bw.write(record);
+            bw.newLine();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to write in File");
+            throw new RuntimeException("Failed to write file");
         }
     }
 
     public void makeEmpty() {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(CONTACT_FILE, false))) {
-            bufferedWriter.write("");
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CONTACT_FILE, false))) {
+            bw.write("");
         } catch (IOException e) {
             throw new RuntimeException("Failed to remove all elements");
         }
@@ -99,10 +98,10 @@ public class ContactFileManager {
     public Integer readLargestId() {
         int max = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(CONTACT_FILE))) {
-            String currentLine;
-            while ((currentLine = br.readLine()) != null) {
-                String[] line = currentLine.split(", ");
-                Integer id = Integer.parseInt(line[0]);
+            String record;
+            while ((record = br.readLine()) != null) {
+                String[] fields = record.split(", ");
+                Integer id = Integer.parseInt(fields[0]);
                 if (id > max) {
                     max = id;
                 }

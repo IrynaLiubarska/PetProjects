@@ -1,9 +1,9 @@
 package databaseOrganizer.person;
 
 import databaseOrganizer.contact.ContactDao;
-import databaseOrganizer.delete.DeleteFactory;
 import databaseOrganizer.delete.DeletePolicy;
-import databaseOrganizer.delete.Deleter;
+import databaseOrganizer.delete.DeleteStrategy;
+import databaseOrganizer.delete.DeleteStrategyFactory;
 import lombok.NonNull;
 
 import java.util.List;
@@ -17,21 +17,21 @@ public class PersonDaoImpl implements PersonDao {
     private PersonSerializer personSerializer = new PersonSerializer();
     private PersonDeserializer personDeserializer = new PersonDeserializer();
     private Integer currentId;
-    private Deleter deleter;
+    private DeleteStrategy deleteStrategy;
 
     public PersonDaoImpl() {
         this(DeletePolicy.DELETE_NO_ACTION, null);
     }
 
     public PersonDaoImpl(DeletePolicy deletePolicy, ContactDao contactDao) {
-        deleter = DeleteFactory.createDeleter(deletePolicy, contactDao);
+        deleteStrategy = DeleteStrategyFactory.create(deletePolicy, contactDao);
         currentId = personFileManager.readLargestId() + 1;
     }
 
     @Override
     public void insert(@NonNull Person person) {
         if (person.getId() == null) {
-            String record = createRecordLine(person);
+            String record = createRecord(person);
             personFileManager.writeToFile(record);
         } else {
             throw new IllegalArgumentException("person id should be null");
@@ -40,17 +40,17 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public Person getById(@NonNull Integer id) {
-        String line = personFileManager.readById(id);
-        if (line==null) {
+        String record = personFileManager.readById(id);
+        if (record == null) {
             return null;
         }
-        return personDeserializer.deserialize(line);
+        return personDeserializer.deserialize(record);
     }
 
     @Override
     public List<Person> getBySurname(@NonNull String surname) {
-        List<String> recordsWithSameSurnames = personFileManager.readBySurname(surname);
-        return personDeserializer.convert(recordsWithSameSurnames);
+        List<String> persons = personFileManager.readBySurname(surname);
+        return personDeserializer.deserialize(persons);
     }
 
     @Override
@@ -60,19 +60,17 @@ public class PersonDaoImpl implements PersonDao {
     }
 
     @Override
-    public void delete(@NonNull Integer personId) {
-        deleter.delete(personId);
-        deletePerson(personId);
+    public void delete(@NonNull Integer id) {
+        Person person = getById(id);
+        if (person == null) {
+            throw new RuntimeException("There is no such person"); // TODO test this case
+        }
+        deleteStrategy.delete(id);
+        personFileManager.writeToFile(Integer.toString(id) + ", DELETE");
     }
 
-    private void deletePerson(@NonNull Integer personId) {
-        personFileManager.readById(personId);
-        personFileManager.writeToFile(Integer.toString(personId) + ", DELETE");
-    }
-
-    private String createRecordLine(Person person) {
+    private String createRecord(Person person) {
         person.setId(currentId++);
         return personSerializer.serialize(person);
     }
-
 }

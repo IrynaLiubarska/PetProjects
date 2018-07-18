@@ -5,8 +5,8 @@ import databaseOrganizer.contact.ContactDao;
 /**
  * Created by Iryna on 09.07.2018.
  */
-public class DeleteCascade implements Deleter {
-    
+public class DeleteCascade implements DeleteStrategy {
+
     private ContactDao contactDao;
 
     public DeleteCascade(ContactDao contactDao) {
@@ -15,5 +15,6 @@ public class DeleteCascade implements Deleter {
 
     @Override
     public void delete(Integer personId) {
-        contactDao.deleteByPersonId(personId);    }
+        contactDao.deleteByPersonId(personId);
+    }
 }

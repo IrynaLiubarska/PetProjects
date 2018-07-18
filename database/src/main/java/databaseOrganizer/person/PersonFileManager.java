@@ -13,54 +13,54 @@ public class PersonFileManager {
     private final static String PERSON_FILE = "C:\\Users\\Iryna\\Desktop\\personalData.txt";
 
     public String readById(Integer personId) {
-        String finalResultOfCurrentLine = null;
+        String record = null;
         try (BufferedReader br = new BufferedReader(new FileReader(PERSON_FILE))) {
-            String currentLine;
-            while ((currentLine = br.readLine()) != null) {
-                String[] line = currentLine.split(", ");
-                String id = line[0];
+            String currentRecord;
+            while ((currentRecord = br.readLine()) != null) {
+                String[] fields = currentRecord.split(", ");
+                String id = fields[0];
                 if (id.equals(Integer.toString(personId))) {
-                    finalResultOfCurrentLine = currentLine;
-                    if (line[1].equals("DELETE")) {
-                       return null;
+                    record = currentRecord;
+                    if (fields[1].equals("DELETE")) {
+                        return null;
                     }
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(personId + "Failed to find this person id");
+            throw new RuntimeException("Can not read file");
         }
-        return finalResultOfCurrentLine;
+        return record;
     }
 
     public List<String> readBySurname(String wantedSurname) {
-        List<String> linesOfPersonalDataBySurname = new ArrayList<>();
+        List<String> records = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(PERSON_FILE))) {
-            String currentLine;
-            while ((currentLine = br.readLine()) != null) {
-                String[] line = currentLine.split(", ");
-                String surname = line[1];
+            String currentRecord;
+            while ((currentRecord = br.readLine()) != null) {
+                String[] fields = currentRecord.split(", ");
+                String surname = fields[1];
                 if (surname.equals(wantedSurname)) {
-                    linesOfPersonalDataBySurname.add(currentLine);
+                    records.add(currentRecord);
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to get by surname");
         }
-        return linesOfPersonalDataBySurname;
+        return records;
     }
-    
+
     public void writeToFile(String record) {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PERSON_FILE, true))) {
-            bufferedWriter.write(record);
-            bufferedWriter.newLine();
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(PERSON_FILE, true))) {
+            bw.write(record);
+            bw.newLine();
         } catch (IOException e) {
             throw new RuntimeException("Failed to write in File");
         }
     }
 
     public void makeEmpty() {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PERSON_FILE, false))) {
-            bufferedWriter.write("");
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(PERSON_FILE, false))) {
+            bw.write("");
         } catch (IOException e) {
             throw new RuntimeException("Failed to remove all elements");
         }
