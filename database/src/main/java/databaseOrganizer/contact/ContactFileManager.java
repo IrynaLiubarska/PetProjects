@@ -2,7 +2,9 @@ package databaseOrganizer.contact;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Iryna on 05.07.2018.
@@ -21,9 +23,7 @@ public class ContactFileManager {
                     String id = line[0];
                     if (id.equals(wantedId.toString())) {
                         finalResultOfCurrentLine = currentLine;
-                        if (line[1].equals("DEL")) {
-                            throw new RuntimeException("The contact with this id was deleted");
-                        }
+                        checkIfDelete(line[2]);
                     }
                 }
             } catch (IOException e) {
@@ -35,7 +35,14 @@ public class ContactFileManager {
         return finalResultOfCurrentLine;
     }
 
-    public List<String> readByPersonId(String id) {
+    private void checkIfDelete(String s) {
+        if (s.equals("DELETE")) {
+            throw new RuntimeException("The contact with this id was deleted");
+        }
+    }
+
+    public List<String> readByPersonId(String wantedPersonId) {
+        Map<String, String> contactIdToPersonalDataLine = new HashMap<>();
         List<String> linesOfPersonalDataBySurname = new ArrayList<>();
         try {
             try (BufferedReader br = new BufferedReader(new FileReader(CONTACT_FILE))) {
@@ -43,11 +50,10 @@ public class ContactFileManager {
                 try {
                     while ((currentLine = br.readLine()) != null) {
                         String[] line = currentLine.split(", ");
-                        String surname = line[1];
-                        if (surname.equals(id)) {
-                            linesOfPersonalDataBySurname.add(currentLine);
-                        }
+                        addToMapIfExist(wantedPersonId, contactIdToPersonalDataLine, currentLine, line);
+                        removeFromMapIfDelete(contactIdToPersonalDataLine, line);
                     }
+                    linesOfPersonalDataBySurname.addAll(contactIdToPersonalDataLine.values());
                 } catch (IOException e) {
                     throw new RuntimeException("Failed reading by person id");
                 }
@@ -56,6 +62,21 @@ public class ContactFileManager {
             e.printStackTrace();
         }
         return linesOfPersonalDataBySurname;
+    }
+
+    private void addToMapIfExist(String wantedPersonId, Map<String, String> contactIdToPersonalDataLine, String currentLine, String[] line) {
+        String personId = line[1];
+        if (personId.equals(wantedPersonId)) {
+            String contactId = line[0];
+            contactIdToPersonalDataLine.put(contactId, currentLine);
+        }
+    }
+
+    private void removeFromMapIfDelete(Map<String, String> contactIdToPersonalDataLine, String[] line) {
+        String deleteGap = line[2];
+        if (deleteGap.equals("DELETE")) {
+            contactIdToPersonalDataLine.remove(line[0]);
+        }
     }
 
     public void writeToFile(String transcription) {

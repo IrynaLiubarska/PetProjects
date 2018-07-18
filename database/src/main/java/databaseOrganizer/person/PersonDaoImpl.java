@@ -19,9 +19,13 @@ public class PersonDaoImpl implements PersonDao {
     private Integer currentId;
     private Deleter deleter;
 
+    public PersonDaoImpl(){
+        this(DeletePolicy.DELETE_NO_ACTION, null);
+    }
+    
     public PersonDaoImpl(DeletePolicy deletePolicy, ContactDao contactDao) {
         deleter = DeleteFactory.createDeleter(deletePolicy, contactDao);
-        currentId = personFileManager.readLargestId() + 1;        
+        currentId = personFileManager.readLargestId() + 1;
     }
 
     @Override
@@ -45,8 +49,8 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public List<Person> getBySurname(@NonNull String surname) {
-        List<String> transcriptionsListWithSameSurname = personFileManager.readBySurname(surname);
-        return personDeserializer.convert(transcriptionsListWithSameSurname);
+        List<String> recordsWithSameSurnames = personFileManager.readBySurname(surname);
+        return personDeserializer.convert(recordsWithSameSurnames);
     }
 
     @Override

@@ -8,9 +8,9 @@ import java.util.List;
 public interface PersonDao {
     
     void insert(Person person);
-    
+
     Person getById(Integer id);
-    
+
     List<Person> getBySurname(String surname);
     
     void deleteAll();

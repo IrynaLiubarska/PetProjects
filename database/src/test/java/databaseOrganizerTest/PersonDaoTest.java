@@ -1,8 +1,6 @@
 package databaseOrganizerTest;
 
 
-import databaseOrganizer.contact.ContactDaoImpl;
-import databaseOrganizer.delete.DeletePolicy;
 import databaseOrganizer.person.Person;
 import databaseOrganizer.person.PersonDao;
 import databaseOrganizer.person.PersonDaoImpl;
@@ -20,7 +18,7 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class PersonDaoTest {
 
-    private PersonDao personDaoImpl = new PersonDaoImpl(DeletePolicy.DELETE_NO_ACTION, new ContactDaoImpl());
+    private PersonDao personDao;
     private Person firstPerson;
     private Person secondPerson;
     private Person thirdPerson;
@@ -29,8 +27,17 @@ public class PersonDaoTest {
     private Person expectedThirdPerson;
 
     @Before
-    public void removeAllRecords() throws IOException {
-        personDaoImpl.deleteAll();
+    public void before() throws IOException {
+        prepareDao();
+        prepareTestData();
+    }
+
+    private void prepareDao() {
+        personDao = new PersonDaoImpl();
+        personDao.deleteAll();
+    }
+
+    private void prepareTestData() {
         firstPerson = new Person("liubarskyi", "dmytro", 26, "munich");
         secondPerson = new Person("liubarska", "iryna", 29, "munich");
         thirdPerson = new Person("liubarska", "kateryna", 31, "kyiv");
@@ -40,61 +47,50 @@ public class PersonDaoTest {
     }
 
     @Test
-    public void shouldInsertPersonToDatabase() throws IOException {
-        personDaoImpl.insert(firstPerson);
-
-        List<Person> actualListOfPeople = personDaoImpl.getBySurname(firstPerson.getSurname());
-
-        List<Person> expectedListOfPeople = new ArrayList<>();
-        expectedListOfPeople.add(expectedFirstPerson);
-        assertEquals(expectedListOfPeople, actualListOfPeople);
+    public void shouldInsertAndGetById() {
+        personDao.insert(firstPerson);
+        assertEquals(expectedFirstPerson, personDao.getById(firstPerson.getId()));
     }
 
     @Test(expected = NullPointerException.class)
-    public void shouldThrowExceptionByInsertionNull() {
-        personDaoImpl.insert(null);
+    public void shouldThrowExceptionWhenInsertingNull() {
+        personDao.insert(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shouldThrowExceptionByInsertPersonWithIdWhichWasPresentedBeforeInsertion(){
-        personDaoImpl.insert(new Person(0, "liubarska", "kateryna", 31, "kyiv"));
-    }
-
-    @Test
-    public void shouldInsertTwoPeopleWithDifferentIds() throws IOException {
-        personDaoImpl.insert(this.firstPerson);
-        personDaoImpl.insert(this.secondPerson);
-
-        Person firstPerson = personDaoImpl.getById(this.firstPerson.getId());
-        Person secondPerson = personDaoImpl.getById(this.secondPerson.getId());
-
-        assertEquals(expectedFirstPerson, firstPerson);
-        assertEquals(expectedSecondPerson, secondPerson);
-    }
-
-    @Test
-    public void shouldGetPersonById() throws IOException {
-        personDaoImpl.insert(firstPerson);
-        assertEquals(expectedFirstPerson, personDaoImpl.getById(firstPerson.getId()));
+    public void shouldThrowExceptionWhenIdIsPresent() {
+        personDao.insert(new Person(0, "liubarska", "kateryna", 31, "kyiv"));
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowExceptionWhenGetNullPersonId() {
-        personDaoImpl.getById(null);
+        personDao.getById(null);
     }
-   
+
     @Test(expected = RuntimeException.class)
-    public void shouldThrowExceptionIfThereIsNoSuchId() throws IOException {
-        personDaoImpl.getById(0);
+    public void shouldThrowExceptionIfThereIsNoSuchId() {
+        personDao.getById(0);
     }
 
     @Test
-    public void shouldGetListOfPeopleBySurname() throws IOException {
-        personDaoImpl.insert(firstPerson);
-        personDaoImpl.insert(secondPerson);
-        personDaoImpl.insert(thirdPerson);
+    public void shouldInsertTwoPeopleWithDifferentIds() {
+        personDao.insert(firstPerson);
+        personDao.insert(secondPerson);
 
-        List<Person> personListBySurname = personDaoImpl.getBySurname(secondPerson.getSurname());
+        Person actualFirstPerson = personDao.getById(firstPerson.getId());
+        Person actualSecondPerson = personDao.getById(secondPerson.getId());
+
+        assertEquals(expectedFirstPerson, actualFirstPerson);
+        assertEquals(expectedSecondPerson, actualSecondPerson);
+    }
+
+    @Test
+    public void shouldGetListOfPeopleBySurname() {
+        personDao.insert(firstPerson);
+        personDao.insert(secondPerson);
+        personDao.insert(thirdPerson);
+
+        List<Person> personListBySurname = personDao.getBySurname(secondPerson.getSurname());
 
         List<Person> expectedPersonListBySurname = new ArrayList<>();
         expectedPersonListBySurname.add(expectedSecondPerson);
@@ -103,9 +99,9 @@ public class PersonDaoTest {
     }
 
     @Test
-    public void shouldGetEmptyListOfPeopleWhenNoSuchSurname() throws IOException {
-        personDaoImpl.insert(firstPerson);
-        List<Person> peopleList = personDaoImpl.getBySurname("tsukanova");
+    public void shouldGetEmptyListOfPeopleWhenNoSuchSurname() {
+        personDao.insert(firstPerson);
+        List<Person> peopleList = personDao.getBySurname("tsukanova");
 
         List<Person> expectedEmptyList = new ArrayList<>();
         assertEquals(expectedEmptyList, peopleList);
@@ -113,7 +109,22 @@ public class PersonDaoTest {
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowExceptionWhenGettingByNullSurname() {
-        personDaoImpl.getBySurname(null);
+        personDao.getBySurname(null);
     }
-    
+
+    @Test(expected = RuntimeException.class)
+    public void shouldDeletePerson() {
+        personDao.insert(firstPerson);
+        personDao.delete(firstPerson.getId());
+        personDao.getById(firstPerson.getId());
+    }
+
+//    @Test
+//    public void shouldDeleteAllPeople() {
+//        personDao.insert(firstPerson);
+//        personDao.insert(secondPerson);
+//        personDao.insert(thirdPerson);
+//
+//        personDao.deleteAll();
+//    }
 }

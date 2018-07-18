@@ -49,9 +49,10 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public void deleteById(Integer id) {
-        contactFileManager.readById(id);
-        contactFileManager.writeToFile(Integer.toString(id) + ", DELETE");
-    }
+       String line = contactFileManager.readById(id);
+        Contact contact = contactDeserializer.deserialize(line);
+        contactFileManager.writeToFile(Integer.toString(id) + ", " + contact.getPersonId() + ", DELETE");
+    } 
 
     @Override
     public void deleteByPersonId(Integer personId) {

@@ -48,10 +48,10 @@ public class PersonFileManager {
         }
         return linesOfPersonalDataBySurname;
     }
-
-    public void writeToFile(String transcription) {
+    
+    public void writeToFile(String record) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PERSON_FILE, true))) {
-            bufferedWriter.write(transcription);
+            bufferedWriter.write(record);
             bufferedWriter.newLine();
         } catch (IOException e) {
             throw new RuntimeException("Failed to write in File");

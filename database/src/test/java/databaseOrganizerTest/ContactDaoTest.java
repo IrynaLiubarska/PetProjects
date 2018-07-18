@@ -1,12 +1,10 @@
 package databaseOrganizerTest;
 
 import databaseOrganizer.contact.Contact;
-import databaseOrganizer.contact.ContactDao;
 import databaseOrganizer.contact.ContactDaoImpl;
 import databaseOrganizer.contact.ContactType;
 import databaseOrganizer.delete.DeletePolicy;
 import databaseOrganizer.person.Person;
-import databaseOrganizer.person.PersonDao;
 import databaseOrganizer.person.PersonDaoImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +20,9 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class ContactDaoTest {
 
-    private ContactDao contactDaoImpl = new ContactDaoImpl();
-    private PersonDao personDaoImpl = new PersonDaoImpl(DeletePolicy.DELETE_NO_ACTION, contactDaoImpl);
+    private ContactDaoImpl contactDaoImpl = new ContactDaoImpl();
+    private PersonDaoImpl personDaoImpl = new PersonDaoImpl(DeletePolicy.DELETE_NO_ACTION, contactDaoImpl);
+    
     private Person firstPerson;
     private Contact firstContact;
     private Contact secondContact;
@@ -32,6 +31,7 @@ public class ContactDaoTest {
 
     @Before
     public void removeAllRecords() throws IOException {
+        contactDaoImpl.setPersonDao(personDaoImpl);
         personDaoImpl.deleteAll();
         contactDaoImpl.deleteAll();
         firstPerson = new Person("liubarskyi", "dmytro", 26, "munich");
@@ -45,7 +45,7 @@ public class ContactDaoTest {
     public void shouldInsertContactToDatabase() {
         personDaoImpl.insert(firstPerson);
         contactDaoImpl.insert(firstContact);
-        assertEquals(singletonList(firstContactExpected), contactDaoImpl.getByPersonId(0));
+        assertEquals(singletonList(firstContactExpected), contactDaoImpl.getByPersonId(firstPerson.getId()));
     }
 
     @Test(expected = NullPointerException.class)
@@ -64,7 +64,7 @@ public class ContactDaoTest {
         personDaoImpl.insert(firstPerson);
         contactDaoImpl.insert(firstContact);
         contactDaoImpl.insert(secondContact);
-        assertEquals(asList(firstContactExpected, secondContactExpected), contactDaoImpl.getByPersonId(0));
+        assertEquals(asList(firstContactExpected, secondContactExpected), contactDaoImpl.getByPersonId(firstPerson.getId()));
     }
 
     @Test(expected = RuntimeException.class)
