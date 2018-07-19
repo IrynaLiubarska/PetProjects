@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static junit.framework.TestCase.assertEquals;
 
@@ -83,14 +84,14 @@ public class ContactDaoTest {
         contactDao.insert(firstContact);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void shouldDeleteContact() {
         personDao.insert(firstPerson);
         contactDao.insert(firstContact);
 
         contactDao.deleteById(firstContact.getId());
 
-        contactDao.getByPersonId(firstPerson.getId());
+        assertEquals(emptyList(), contactDao.getByPersonId(firstPerson.getId()));
     }
 
     @Test(expected = NullPointerException.class)

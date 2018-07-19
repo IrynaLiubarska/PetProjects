@@ -36,8 +36,8 @@ public class ContactDaoImpl implements ContactDao {
     public List<Contact> getByPersonId(@NonNull Integer id) {
         List<Contact> contacts = new ArrayList<>();
         List<String> records = contactFileManager.readByPersonId(Integer.toString(id));
-        if(records.isEmpty()){
-            throw new RuntimeException("there are no contacts for this person");
+        if (records.isEmpty()) {
+            return contacts;
         }
         for (String record : records) {
             Contact contact = contactDeserializer.deserialize(record);
