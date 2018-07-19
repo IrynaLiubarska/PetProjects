@@ -1,6 +1,6 @@
-package databaseOrganizerTest;
+package com.liubarska.dbTest;
 
-import databaseOrganizer.person.Person;
+import com.liubarska.db.person.Person;
 import org.junit.Test;
 
 /**

@@ -1,9 +1,9 @@
-package databaseOrganizerTest;
+package com.liubarska.dbTest;
 
 
-import databaseOrganizer.person.Person;
-import databaseOrganizer.person.PersonDao;
-import databaseOrganizer.person.PersonDaoImpl;
+import com.liubarska.db.person.Person;
+import com.liubarska.db.person.PersonDao;
+import com.liubarska.db.person.PersonDaoImpl;
 import org.junit.Before;
 import org.junit.Test;
 

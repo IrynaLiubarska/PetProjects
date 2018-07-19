@@ -1,9 +1,9 @@
-package databaseOrganizer.person;
+package com.liubarska.db.person;
 
-import databaseOrganizer.contact.ContactDao;
-import databaseOrganizer.delete.DeletePolicy;
-import databaseOrganizer.delete.DeleteStrategy;
-import databaseOrganizer.delete.DeleteStrategyFactory;
+import com.liubarska.db.contact.ContactDao;
+import com.liubarska.db.delete.DeletePolicy;
+import com.liubarska.db.delete.DeleteStrategy;
+import com.liubarska.db.delete.DeleteStrategyFactory;
 import lombok.NonNull;
 
 import java.util.List;

@@ -1,7 +1,7 @@
-package databaseOrganizerTest;
+package com.liubarska.dbTest;
 
-import databaseOrganizer.contact.Contact;
-import databaseOrganizer.contact.ContactType;
+import com.liubarska.db.contact.Contact;
+import com.liubarska.db.contact.ContactType;
 import org.junit.Test;
 
 /**

@@ -1,4 +1,4 @@
-package databaseOrganizer.person;
+package com.liubarska.db.person;
 
 import java.io.*;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
-package databaseOrganizer.contact;
+package com.liubarska.db.contact;
 
-import databaseOrganizer.person.PersonDao;
+import com.liubarska.db.person.PersonDao;
 import lombok.NonNull;
 
 import java.util.ArrayList;

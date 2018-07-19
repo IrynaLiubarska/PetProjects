@@ -1,6 +1,6 @@
-package databaseOrganizer.delete;
+package com.liubarska.db.delete;
 
-import databaseOrganizer.contact.ContactDao;
+import com.liubarska.db.contact.ContactDao;
 
 import java.util.NoSuchElementException;
 

@@ -1,4 +1,4 @@
-package databaseOrganizer.contact;
+package com.liubarska.db.contact;
 
 import java.io.*;
 import java.util.ArrayList;

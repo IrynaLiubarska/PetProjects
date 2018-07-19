@@ -1,4 +1,4 @@
-package databaseOrganizer.person;
+package com.liubarska.db.person;
 
 /**
  * Created by Iryna on 03.07.2018.

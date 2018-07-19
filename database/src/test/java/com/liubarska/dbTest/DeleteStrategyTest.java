@@ -1,11 +1,11 @@
-package databaseOrganizerTest;
+package com.liubarska.dbTest;
 
-import databaseOrganizer.contact.Contact;
-import databaseOrganizer.contact.ContactDaoImpl;
-import databaseOrganizer.contact.ContactType;
-import databaseOrganizer.delete.DeletePolicy;
-import databaseOrganizer.person.Person;
-import databaseOrganizer.person.PersonDaoImpl;
+import com.liubarska.db.contact.Contact;
+import com.liubarska.db.contact.ContactDaoImpl;
+import com.liubarska.db.contact.ContactType;
+import com.liubarska.db.delete.DeletePolicy;
+import com.liubarska.db.person.Person;
+import com.liubarska.db.person.PersonDaoImpl;
 import org.junit.Before;
 import org.junit.Test;
 

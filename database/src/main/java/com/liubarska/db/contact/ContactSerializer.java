@@ -1,4 +1,4 @@
-package databaseOrganizer.contact;
+package com.liubarska.db.contact;
 
 /**
  * Created by Iryna on 03.07.2018.

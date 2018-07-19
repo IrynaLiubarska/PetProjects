@@ -1,7 +1,7 @@
-package databaseOrganizer.delete;
+package com.liubarska.db.delete;
 
-import databaseOrganizer.contact.Contact;
-import databaseOrganizer.contact.ContactDao;
+import com.liubarska.db.contact.Contact;
+import com.liubarska.db.contact.ContactDao;
 
 import java.util.List;
 
