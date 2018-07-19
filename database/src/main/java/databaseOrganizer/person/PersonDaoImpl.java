@@ -63,7 +63,7 @@ public class PersonDaoImpl implements PersonDao {
     public void delete(@NonNull Integer id) {
         Person person = getById(id);
         if (person == null) {
-            throw new RuntimeException("There is no such person"); // TODO test this case
+            throw new RuntimeException("There is no such person"); 
         }
         deleteStrategy.delete(id);
         personFileManager.writeToFile(Integer.toString(id) + ", DELETE");

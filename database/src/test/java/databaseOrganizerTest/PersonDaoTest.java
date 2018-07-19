@@ -94,7 +94,7 @@ public class PersonDaoTest {
         personDao.insert(thirdPerson);
 
         Collection<Person> personListBySurname = personDao.getBySurname(secondPerson.getSurname());
-        
+
         assertEquals(asList(expectedSecondPerson, expectedThirdPerson), personListBySurname);
     }
 
@@ -117,6 +117,11 @@ public class PersonDaoTest {
         personDao.insert(firstPerson);
         personDao.delete(firstPerson.getId());
         assertNull(personDao.getById(firstPerson.getId()));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void shouldThrowExceptionWhenNoSuchId() {
+        personDao.delete(firstPerson.getId());
     }
 
     @Test
