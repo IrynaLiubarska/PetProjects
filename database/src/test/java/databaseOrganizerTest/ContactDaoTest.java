@@ -82,5 +82,25 @@ public class ContactDaoTest {
     public void shouldThrowExceptionWhenPersonDoesNotExists() {
         contactDao.insert(firstContact);
     }
+
+    @Test(expected = RuntimeException.class)
+    public void shouldDeleteContact() {
+        personDao.insert(firstPerson);
+        contactDao.insert(firstContact);
+
+        contactDao.deleteById(firstContact.getId());
+
+        contactDao.getByPersonId(firstPerson.getId());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void shouldThrowExceptionWhenDeleteNullId(){
+        contactDao.deleteById(null);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void shouldThrowExceptionWhenDeleteIdThatIsNotPresentInDatabase(){
+        contactDao.deleteById(firstContact.getId());
+    }
 }
 

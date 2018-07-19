@@ -86,6 +86,12 @@ public class ContactFileManager {
             throw new RuntimeException("Failed to write file");
         }
     }
+    
+    public void deleteFromFile(Integer contactId, ContactDeserializer contactDeserializer){
+        String record = readById(contactId);
+        Contact contact = contactDeserializer.deserialize(record);
+        writeToFile(Integer.toString(contactId) + ", " + contact.getPersonId() + ", DELETE");
+    }
 
     public void makeEmpty() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(CONTACT_FILE, false))) {

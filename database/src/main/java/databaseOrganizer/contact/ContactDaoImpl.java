@@ -36,6 +36,9 @@ public class ContactDaoImpl implements ContactDao {
     public List<Contact> getByPersonId(@NonNull Integer id) {
         List<Contact> contacts = new ArrayList<>();
         List<String> records = contactFileManager.readByPersonId(Integer.toString(id));
+        if(records.isEmpty()){
+            throw new RuntimeException("there are no contacts for this person");
+        }
         for (String record : records) {
             Contact contact = contactDeserializer.deserialize(record);
             contacts.add(contact);
@@ -51,9 +54,7 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public void deleteById(@NonNull Integer id) {
-        String record = contactFileManager.readById(id);
-        Contact contact = contactDeserializer.deserialize(record);
-        contactFileManager.writeToFile(Integer.toString(id) + ", " + contact.getPersonId() + ", DELETE"); // TODO
+        contactFileManager.deleteFromFile(id, contactDeserializer);
     }
 
     @Override
