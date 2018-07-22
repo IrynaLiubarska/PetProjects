@@ -17,7 +17,7 @@ public class ContactDaoImpl implements ContactDao {
     public void insert(@NonNull Contact contact) {
         Integer personId = contact.getPersonId();
         if (personDao.getById(personId) == null) {
-            throw new RuntimeException("there is no person with this id");
+            throw new RuntimeException("There is no person with such id");
         }
         contactFileManager.insert(contact);
     }
@@ -40,8 +40,8 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public void deleteById(@NonNull Integer id) {
         Contact contact = getById(id);
-        if(contact==null){
-            throw new RuntimeException("There is no contact with this id");
+        if (contact == null) {
+            throw new RuntimeException("There is no contact with such id");
         }
         contactFileManager.deleteById(id);
     }

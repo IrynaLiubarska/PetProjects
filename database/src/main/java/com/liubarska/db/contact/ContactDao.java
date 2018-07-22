@@ -1,21 +1,15 @@
 package com.liubarska.db.contact;
 
+import com.liubarska.db.common.Dao;
+
 import java.util.List;
 
 /**
  * Created by Iryna on 03.07.2018.
  */
-public interface ContactDao {
-
-    void insert(Contact contact);
-    
-    Contact getById(Integer id);
+public interface ContactDao extends Dao<Contact> {
 
     List<Contact> getByPersonId(Integer personId);
-
-    void deleteAll();
-
-    void deleteById(Integer id);
 
     void deleteByPersonId(Integer personId);
 }

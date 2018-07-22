@@ -1,8 +1,8 @@
-package com.liubarska.db;
+package com.liubarska.db.common;
 
 import java.io.*;
 
-import static com.liubarska.db.Constants.*;
+import static com.liubarska.db.common.Constants.*;
 
 /**
  * Created by Iryna on 22.07.2018.

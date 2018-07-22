@@ -1,4 +1,4 @@
-package com.liubarska.db;
+package com.liubarska.db.common;
 
 import lombok.experimental.UtilityClass;
 

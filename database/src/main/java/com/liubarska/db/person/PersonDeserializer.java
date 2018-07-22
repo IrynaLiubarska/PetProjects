@@ -1,15 +1,18 @@
 package com.liubarska.db.person;
 
+import com.liubarska.db.common.Deserializer;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.liubarska.db.Constants.FIELD_SEPARATOR;
+import static com.liubarska.db.common.Constants.FIELD_SEPARATOR;
 
 /**
  * Created by Iryna on 04.07.2018.
  */
-public class PersonDeserializer {
-
+public class PersonDeserializer implements Deserializer<Person> {
+    
+    @Override
     public Person deserialize(String record) {
         String[] fields = record.split(FIELD_SEPARATOR);
         int id = Integer.parseInt(fields[0]);

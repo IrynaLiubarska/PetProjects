@@ -2,7 +2,7 @@ package com.liubarska.db.delete;
 
 import com.liubarska.db.contact.ContactDao;
 
-import java.util.NoSuchElementException;
+import static com.liubarska.db.delete.DeletePolicy.*;
 
 /**
  * Created by Iryna on 09.07.2018.
@@ -10,14 +10,14 @@ import java.util.NoSuchElementException;
 public class DeleteStrategyFactory {
 
     public static DeleteStrategy create(DeletePolicy deletePolicy, ContactDao contactDao) {
-        if (deletePolicy.equals(DeletePolicy.DELETE_RESTRICT)) {
+        if (DELETE_RESTRICT.equals(deletePolicy)) {
             return new DeleteRestrict(contactDao);
-        } else if (deletePolicy.equals(DeletePolicy.DELETE_NO_ACTION)) {
+        } else if (DELETE_NO_ACTION.equals(deletePolicy)) {
             return new DeleteNoAction();
-        } else if (deletePolicy.equals(DeletePolicy.DELETE_CASCADE)) {
+        } else if (DELETE_CASCADE.equals(deletePolicy)) {
             return new DeleteCascade(contactDao);
         } else {
-            throw new NoSuchElementException("Unknown deleteById policy");
+            throw new IllegalStateException("Unknown delete policy");
         }
     }
 }

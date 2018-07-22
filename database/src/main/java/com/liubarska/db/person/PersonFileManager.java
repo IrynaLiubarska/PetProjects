@@ -1,6 +1,6 @@
 package com.liubarska.db.person;
 
-import com.liubarska.db.FileManager;
+import com.liubarska.db.common.FileManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.liubarska.db.Constants.FAILED_TO_ACCESS_FILE;
-import static com.liubarska.db.Constants.FIELD_SEPARATOR;
+import static com.liubarska.db.common.Constants.FAILED_TO_ACCESS_FILE;
+import static com.liubarska.db.common.Constants.FIELD_SEPARATOR;
 
 
 /**
@@ -29,6 +29,11 @@ public class PersonFileManager extends FileManager {
     public void insert(Person person) {
         String record = createRecord(person);
         writeToFile(record);
+    }
+
+    private String createRecord(Person person) {
+        person.setId(currentId++);
+        return personSerializer.serialize(person);
     }
 
     public Person getById(int id) {
@@ -54,10 +59,5 @@ public class PersonFileManager extends FileManager {
             throw new RuntimeException(FAILED_TO_ACCESS_FILE);
         }
         return personDeserializer.deserialize(records);
-    }
-
-    private String createRecord(Person person) {
-        person.setId(currentId++);
-        return personSerializer.serialize(person);
     }
 }

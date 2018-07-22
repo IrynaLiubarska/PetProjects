@@ -1,6 +1,6 @@
 package com.liubarska.db.contact;
 
-import com.liubarska.db.FileManager;
+import com.liubarska.db.common.FileManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.liubarska.db.Constants.*;
+import static com.liubarska.db.common.Constants.*;
 
 /**
  * Created by Iryna on 05.07.2018.
@@ -28,6 +28,11 @@ public class ContactFileManager extends FileManager {
     public void insert(Contact contact) {
         String record = createRecord(contact);
         writeToFile(record);
+    }
+
+    private String createRecord(Contact contact) {
+        contact.setId(currentId++);
+        return contactSerializer.serialize(contact);
     }
 
     public Contact getById(int id) {
@@ -80,10 +85,5 @@ public class ContactFileManager extends FileManager {
         if (fields[1].equals(TOMBSTONE)) {
             contactIdToPersonalRecord.remove(fields[0]);
         }
-    }
-
-    private String createRecord(Contact contact) {
-        contact.setId(currentId++);
-        return contactSerializer.serialize(contact);
     }
 }

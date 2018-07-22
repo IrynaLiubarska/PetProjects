@@ -1,12 +1,15 @@
 package com.liubarska.db.contact;
 
-import static com.liubarska.db.Constants.FIELD_SEPARATOR;
+import com.liubarska.db.common.Deserializer;
+
+import static com.liubarska.db.common.Constants.FIELD_SEPARATOR;
 
 /**
  * Created by Iryna on 05.07.2018.
  */
-public class ContactDeserializer {
+public class ContactDeserializer implements Deserializer<Contact> {
 
+    @Override
     public Contact deserialize(String record) {
         String[] fields = record.split(FIELD_SEPARATOR);
         Integer id = Integer.parseInt(fields[0]);
