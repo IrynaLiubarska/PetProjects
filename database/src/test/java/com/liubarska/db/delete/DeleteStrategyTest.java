@@ -1,9 +1,8 @@
-package com.liubarska.dbTest;
+package com.liubarska.db.delete;
 
 import com.liubarska.db.contact.Contact;
 import com.liubarska.db.contact.ContactDaoImpl;
 import com.liubarska.db.contact.ContactType;
-import com.liubarska.db.delete.DeletePolicy;
 import com.liubarska.db.person.Person;
 import com.liubarska.db.person.PersonDaoImpl;
 import org.junit.Before;

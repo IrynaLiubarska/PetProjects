@@ -1,4 +1,4 @@
-package com.liubarska.dbTest;
+package com.liubarska.db.contact;
 
 import com.liubarska.db.contact.Contact;
 import com.liubarska.db.contact.ContactDao;

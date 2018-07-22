@@ -1,4 +1,4 @@
-package com.liubarska.dbTest;
+package com.liubarska.db.person;
 
 
 import com.liubarska.db.person.Person;
