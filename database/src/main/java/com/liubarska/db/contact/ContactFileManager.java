@@ -2,7 +2,9 @@ package com.liubarska.db.contact;
 
 import com.liubarska.db.FileManager;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +17,7 @@ import static com.liubarska.db.Constants.*;
  */
 public class ContactFileManager extends FileManager {
 
-    private final static String CONTACT_FILE = "C:\\Users\\Iryna\\Desktop\\contactData.txt";
+    private final static String CONTACT_FILE = "contactData.txt";
     private ContactSerializer contactSerializer = new ContactSerializer();
     private ContactDeserializer contactDeserializer = new ContactDeserializer();
 
@@ -40,7 +42,7 @@ public class ContactFileManager extends FileManager {
         Map<String, String> contactIdToPersonalRecord = new HashMap<>();
         List<String> records = new ArrayList<>();
         try {
-            try (BufferedReader br = new BufferedReader(new FileReader(CONTACT_FILE))) {
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String currentRecord;
                 while ((currentRecord = br.readLine()) != null) {
                     String[] record = currentRecord.split(FIELD_SEPARATOR);

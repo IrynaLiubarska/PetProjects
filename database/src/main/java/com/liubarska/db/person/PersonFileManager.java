@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.liubarska.db.Constants.*;
+import static com.liubarska.db.Constants.FAILED_TO_ACCESS_FILE;
+import static com.liubarska.db.Constants.FIELD_SEPARATOR;
 
 
 /**
@@ -16,7 +17,7 @@ import static com.liubarska.db.Constants.*;
  */
 public class PersonFileManager extends FileManager {
 
-    private final static String PERSON_FILE = "C:\\Users\\Iryna\\Desktop\\personalData.txt";
+    private final static String PERSON_FILE = "personalData.txt";
     private PersonSerializer personSerializer = new PersonSerializer();
     private PersonDeserializer personDeserializer = new PersonDeserializer();
 
@@ -40,7 +41,7 @@ public class PersonFileManager extends FileManager {
 
     public List<Person> getBySurname(String wantedSurname) {
         List<String> records = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(PERSON_FILE))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String currentRecord;
             while ((currentRecord = br.readLine()) != null) {
                 String[] fields = currentRecord.split(FIELD_SEPARATOR);

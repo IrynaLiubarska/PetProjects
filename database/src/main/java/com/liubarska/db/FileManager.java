@@ -9,12 +9,21 @@ import static com.liubarska.db.Constants.*;
  */
 public abstract class FileManager {
 
-    private String file;
+    protected File file;
     protected int currentId;
 
-    public FileManager(String file) {
-        this.file = file;
+    public FileManager(String fileName) {
+        file = new File(fileName);
+        ensureFileExists();
         currentId = findLargestId() + 1;
+    }
+
+    private void ensureFileExists() {
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
+        }
     }
 
     private int findLargestId() {
