@@ -1,5 +1,7 @@
 package com.liubarska.db.contact;
 
+import com.liubarska.db.FileManager;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,31 +13,30 @@ import static com.liubarska.db.Constants.*;
 /**
  * Created by Iryna on 05.07.2018.
  */
-public class ContactFileManager {
+public class ContactFileManager extends FileManager {
 
     private final static String CONTACT_FILE = "C:\\Users\\Iryna\\Desktop\\contactData.txt";
+    private ContactSerializer contactSerializer = new ContactSerializer();
+    private ContactDeserializer contactDeserializer = new ContactDeserializer();
 
-    public String readById(Integer wantedId) {
-        String record = null;
-        try (BufferedReader br = new BufferedReader(new FileReader(CONTACT_FILE))) {
-            String currentRecord;
-            while ((currentRecord = br.readLine()) != null) {
-                String[] fields = currentRecord.split(FIELD_SEPARATOR);
-                String id = fields[0];
-                if (id.equals(wantedId.toString())) {
-                    record = currentRecord;
-                    if (fields[2].equals(TOMBSTONE)) { // TODO test this case
-                        return null;
-                    }
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
-        }
-        return record;
+    public ContactFileManager() {
+        super(CONTACT_FILE);
     }
 
-    public List<String> readByPersonId(String wantedPersonId) {
+    public void insert(Contact contact) {
+        String record = createRecord(contact);
+        writeToFile(record);
+    }
+
+    public Contact getById(int id) {
+        String record = doGetById(id);
+        if (record == null) {
+            return null;
+        }
+        return contactDeserializer.deserialize(record);
+    }
+
+    public List<Contact> getByPersonId(int personId) {
         Map<String, String> contactIdToPersonalRecord = new HashMap<>();
         List<String> records = new ArrayList<>();
         try {
@@ -43,7 +44,7 @@ public class ContactFileManager {
                 String currentRecord;
                 while ((currentRecord = br.readLine()) != null) {
                     String[] record = currentRecord.split(FIELD_SEPARATOR);
-                    addToMapIfExist(wantedPersonId, contactIdToPersonalRecord, currentRecord, record);
+                    addToMapIfExist(personId, contactIdToPersonalRecord, currentRecord, record);
                     removeFromMapIfDelete(contactIdToPersonalRecord, record);
                 }
                 records.addAll(contactIdToPersonalRecord.values());
@@ -51,60 +52,36 @@ public class ContactFileManager {
         } catch (IOException e) {
             throw new RuntimeException(FAILED_TO_ACCESS_FILE);
         }
-        return records;
+        return getContacts(records);
     }
 
-    private void addToMapIfExist(String wantedPersonId, Map<String, String> contactIdToPersonalRecord, String currentRecord, String[] fields) {
-        String personId = fields[1];
-        if (personId.equals(wantedPersonId)) {
+    private List<Contact> getContacts(List<String> records) {
+        List<Contact> contacts = new ArrayList<>();
+        if (records.isEmpty()) {
+            return contacts;
+        }
+        for (String record : records) {
+            Contact contact = contactDeserializer.deserialize(record);
+            contacts.add(contact);
+        }
+        return contacts;
+    }
+
+    private void addToMapIfExist(int personId, Map<String, String> contactIdToPersonalRecord, String currentRecord, String[] fields) {
+        if (fields[1].equals(String.valueOf(personId))) {
             String contactId = fields[0];
             contactIdToPersonalRecord.put(contactId, currentRecord);
         }
     }
 
     private void removeFromMapIfDelete(Map<String, String> contactIdToPersonalRecord, String[] fields) {
-        if (fields[2].equals(TOMBSTONE)) {
+        if (fields[1].equals(TOMBSTONE)) {
             contactIdToPersonalRecord.remove(fields[0]);
         }
     }
 
-    public void writeToFile(String record) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CONTACT_FILE, true))) {
-            bw.write(record);
-            bw.newLine();
-        } catch (IOException e) {
-            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
-        }
-    }
-
-    public void deleteFromFile(Integer contactId, ContactDeserializer contactDeserializer) {
-        String record = readById(contactId);
-        Contact contact = contactDeserializer.deserialize(record);
-        writeToFile(Integer.toString(contactId) + FIELD_SEPARATOR + contact.getPersonId() + FIELD_SEPARATOR + TOMBSTONE);
-    }
-
-    public void makeEmpty() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CONTACT_FILE, false))) {
-            bw.write("");
-        } catch (IOException e) {
-            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
-        }
-    }
-
-    public Integer readLargestId() {
-        int max = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader(CONTACT_FILE))) {
-            String record;
-            while ((record = br.readLine()) != null) {
-                String[] fields = record.split(FIELD_SEPARATOR);
-                Integer id = Integer.parseInt(fields[0]);
-                if (id > max) {
-                    max = id;
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
-        }
-        return max;
+    private String createRecord(Contact contact) {
+        contact.setId(currentId++);
+        return contactSerializer.serialize(contact);
     }
 }

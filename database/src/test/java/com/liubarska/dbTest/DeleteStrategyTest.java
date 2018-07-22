@@ -49,7 +49,7 @@ public class DeleteStrategyTest {
         contactDao.insert(firstContact);
         contactDao.insert(secondContact);
 
-        personDao.delete(firstPerson.getId());
+        personDao.deleteById(firstPerson.getId());
         assertNull(personDao.getById(firstPerson.getId()));
     }
 
@@ -64,7 +64,7 @@ public class DeleteStrategyTest {
         contactDao.insert(secondContact);
 
         try {
-            personDao.delete(firstPerson.getId());
+            personDao.deleteById(firstPerson.getId());
             fail();
         } catch (RuntimeException e) {
         }
@@ -79,7 +79,7 @@ public class DeleteStrategyTest {
         personDao.deleteAll();
 
         personDao.insert(firstPerson);
-        personDao.delete(firstPerson.getId());
+        personDao.deleteById(firstPerson.getId());
         
         assertNull(personDao.getById(firstPerson.getId()));
     }
@@ -93,7 +93,7 @@ public class DeleteStrategyTest {
         personDao.insert(firstPerson);
         contactDao.insert(firstContact);
         contactDao.insert(secondContact);
-        personDao.delete(firstPerson.getId());
+        personDao.deleteById(firstPerson.getId());
 
         assertNull(personDao.getById(firstPerson.getId()));
         assertEquals(new ArrayList<>(), contactDao.getByPersonId(firstPerson.getId()));

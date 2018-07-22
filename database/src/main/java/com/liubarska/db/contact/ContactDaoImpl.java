@@ -3,7 +3,6 @@ package com.liubarska.db.contact;
 import com.liubarska.db.person.PersonDao;
 import lombok.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,15 +11,7 @@ import java.util.List;
 public class ContactDaoImpl implements ContactDao {
 
     private PersonDao personDao;
-
     private ContactFileManager contactFileManager = new ContactFileManager();
-    private ContactSerializer contactSerializer = new ContactSerializer();
-    private ContactDeserializer contactDeserializer = new ContactDeserializer();
-    private static Integer currentId;
-
-    public ContactDaoImpl() {
-        currentId = contactFileManager.readLargestId() + 1;
-    }
 
     @Override
     public void insert(@NonNull Contact contact) {
@@ -28,42 +19,31 @@ public class ContactDaoImpl implements ContactDao {
         if (personDao.getById(personId) == null) {
             throw new RuntimeException("there is no person with this id");
         }
-        String record = createRecord(contact);
-        contactFileManager.writeToFile(record);
+        contactFileManager.insert(contact);
     }
 
     @Override
     public Contact getById(@NonNull Integer id) {
-        String record = contactFileManager.readById(id);
-        if (record != null) {
-            return contactDeserializer.deserialize(record);
-        }
-        return null;
+        return contactFileManager.getById(id);
     }
 
     @Override
     public List<Contact> getByPersonId(@NonNull Integer id) {
-        List<Contact> contacts = new ArrayList<>();
-        List<String> records = contactFileManager.readByPersonId(Integer.toString(id));
-        if (records.isEmpty()) {
-            return contacts;
-        }
-        for (String record : records) {
-            Contact contact = contactDeserializer.deserialize(record);
-            contacts.add(contact);
-        }
-        return contacts;
+        return contactFileManager.getByPersonId(id);
     }
 
     @Override
     public void deleteAll() {
-        contactFileManager.makeEmpty();
-        currentId = 0;
+        contactFileManager.deleteAll();
     }
 
     @Override
     public void deleteById(@NonNull Integer id) {
-        contactFileManager.deleteFromFile(id, contactDeserializer);
+        Contact contact = getById(id);
+        if(contact==null){
+            throw new RuntimeException("There is no contact with this id");
+        }
+        contactFileManager.deleteById(id);
     }
 
     @Override
@@ -74,11 +54,6 @@ public class ContactDaoImpl implements ContactDao {
                 deleteById(contact.getId());
             }
         }
-    }
-
-    private String createRecord(Contact contact) {
-        contact.setId(currentId++);
-        return contactSerializer.serialize(contact);
     }
 
     public void setPersonDao(PersonDao personDao) {

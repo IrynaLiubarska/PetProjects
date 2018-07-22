@@ -115,13 +115,13 @@ public class PersonDaoTest {
     @Test
     public void shouldDeletePerson() {
         personDao.insert(firstPerson);
-        personDao.delete(firstPerson.getId());
+        personDao.deleteById(firstPerson.getId());
         assertNull(personDao.getById(firstPerson.getId()));
     }
 
     @Test(expected = RuntimeException.class)
     public void shouldThrowExceptionWhenNoSuchId() {
-        personDao.delete(firstPerson.getId());
+        personDao.deleteById(firstPerson.getId());
     }
 
     @Test

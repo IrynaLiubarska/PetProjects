@@ -20,7 +20,7 @@ public class DeleteRestrict implements DeleteStrategy {
     public void delete(Integer personId) {
         List<Contact> contacts = contactDao.getByPersonId(personId);
         if (!contacts.isEmpty()) {
-            throw new RuntimeException("This delete policy does not allow to delete person when contacts still exist");
+            throw new RuntimeException("This deleteById policy does not allow to deleteById person when contacts still exist");
         }
     }
 }

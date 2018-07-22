@@ -14,9 +14,6 @@ import java.util.List;
 public class PersonDaoImpl implements PersonDao {
 
     private PersonFileManager personFileManager = new PersonFileManager();
-    private PersonSerializer personSerializer = new PersonSerializer();
-    private PersonDeserializer personDeserializer = new PersonDeserializer();
-    private Integer currentId;
     private DeleteStrategy deleteStrategy;
 
     public PersonDaoImpl() {
@@ -25,14 +22,12 @@ public class PersonDaoImpl implements PersonDao {
 
     public PersonDaoImpl(DeletePolicy deletePolicy, ContactDao contactDao) {
         deleteStrategy = DeleteStrategyFactory.create(deletePolicy, contactDao);
-        currentId = personFileManager.readLargestId() + 1;
     }
 
     @Override
     public void insert(@NonNull Person person) {
         if (person.getId() == null) {
-            String record = createRecord(person);
-            personFileManager.writeToFile(record);
+            personFileManager.insert(person);
         } else {
             throw new IllegalArgumentException("Person id should be null");
         }
@@ -40,37 +35,26 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public Person getById(@NonNull Integer id) {
-        String record = personFileManager.readById(id);
-        if (record == null) {
-            return null;
-        }
-        return personDeserializer.deserialize(record);
+        return personFileManager.getById(id);
     }
 
     @Override
     public List<Person> getBySurname(@NonNull String surname) {
-        List<String> persons = personFileManager.readBySurname(surname);
-        return personDeserializer.deserialize(persons);
+        return personFileManager.getBySurname(surname);
+    }
+
+    @Override
+    public void deleteById(@NonNull Integer id) {
+        Person person = getById(id);
+        if (person == null) {
+            throw new RuntimeException("There is no person with such id");
+        }
+        deleteStrategy.delete(id);
+        personFileManager.deleteById(id);
     }
 
     @Override
     public void deleteAll() {
-        personFileManager.makeEmpty();
-        currentId = 0;
-    }
-
-    @Override
-    public void delete(@NonNull Integer id) {
-        Person person = getById(id);
-        if (person == null) {
-            throw new RuntimeException("There is no person with such id"); 
-        }
-        deleteStrategy.delete(id);
-        personFileManager.delete(id); 
-    }
-
-    private String createRecord(Person person) {
-        person.setId(currentId++);
-        return personSerializer.serialize(person);
+        personFileManager.deleteAll();
     }
 }
