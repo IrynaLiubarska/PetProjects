@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.liubarska.db.Constants.*;
+
 /**
  * Created by Iryna on 05.07.2018.
  */
@@ -16,29 +18,21 @@ public class ContactFileManager {
     public String readById(Integer wantedId) {
         String record = null;
         try (BufferedReader br = new BufferedReader(new FileReader(CONTACT_FILE))) {
-            try {
-                String currentRecord;
-                while ((currentRecord = br.readLine()) != null) {
-                    String[] fields = currentRecord.split(",");
-                    String id = fields[0];
-                    if (id.equals(wantedId.toString())) {
-                        record = currentRecord;
-                        checkIfDelete(fields);
+            String currentRecord;
+            while ((currentRecord = br.readLine()) != null) {
+                String[] fields = currentRecord.split(FIELD_SEPARATOR);
+                String id = fields[0];
+                if (id.equals(wantedId.toString())) {
+                    record = currentRecord;
+                    if (fields[2].equals(TOMBSTONE)) { // TODO test this case
+                        return null;
                     }
                 }
-            } catch (IOException e) {
-                throw new RuntimeException(wantedId + " Failed reading by id");
             }
         } catch (IOException e) {
-            throw new RuntimeException("Can not read file");
+            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
         }
         return record;
-    }
-
-    private void checkIfDelete(String[] fields) {
-        if (fields[2].equals("DELETE")) {
-            throw new RuntimeException("The contact with this id was deleted");
-        }
     }
 
     public List<String> readByPersonId(String wantedPersonId) {
@@ -47,19 +41,15 @@ public class ContactFileManager {
         try {
             try (BufferedReader br = new BufferedReader(new FileReader(CONTACT_FILE))) {
                 String currentRecord;
-                try {
-                    while ((currentRecord = br.readLine()) != null) {
-                        String[] record = currentRecord.split(", ");
-                        addToMapIfExist(wantedPersonId, contactIdToPersonalRecord, currentRecord, record);
-                        removeFromMapIfDelete(contactIdToPersonalRecord, record);
-                    }
-                    records.addAll(contactIdToPersonalRecord.values());
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed reading by person id");
+                while ((currentRecord = br.readLine()) != null) {
+                    String[] record = currentRecord.split(FIELD_SEPARATOR);
+                    addToMapIfExist(wantedPersonId, contactIdToPersonalRecord, currentRecord, record);
+                    removeFromMapIfDelete(contactIdToPersonalRecord, record);
                 }
+                records.addAll(contactIdToPersonalRecord.values());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
         }
         return records;
     }
@@ -73,7 +63,7 @@ public class ContactFileManager {
     }
 
     private void removeFromMapIfDelete(Map<String, String> contactIdToPersonalRecord, String[] fields) {
-        if (fields[2].equals("DELETE")) {
+        if (fields[2].equals(TOMBSTONE)) {
             contactIdToPersonalRecord.remove(fields[0]);
         }
     }
@@ -83,21 +73,21 @@ public class ContactFileManager {
             bw.write(record);
             bw.newLine();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to write file");
+            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
         }
     }
-    
-    public void deleteFromFile(Integer contactId, ContactDeserializer contactDeserializer){
+
+    public void deleteFromFile(Integer contactId, ContactDeserializer contactDeserializer) {
         String record = readById(contactId);
         Contact contact = contactDeserializer.deserialize(record);
-        writeToFile(Integer.toString(contactId) + ", " + contact.getPersonId() + ", DELETE");
+        writeToFile(Integer.toString(contactId) + FIELD_SEPARATOR + contact.getPersonId() + FIELD_SEPARATOR + TOMBSTONE);
     }
 
     public void makeEmpty() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(CONTACT_FILE, false))) {
             bw.write("");
         } catch (IOException e) {
-            throw new RuntimeException("Failed to remove all elements");
+            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
         }
     }
 
@@ -106,14 +96,14 @@ public class ContactFileManager {
         try (BufferedReader br = new BufferedReader(new FileReader(CONTACT_FILE))) {
             String record;
             while ((record = br.readLine()) != null) {
-                String[] fields = record.split(", ");
+                String[] fields = record.split(FIELD_SEPARATOR);
                 Integer id = Integer.parseInt(fields[0]);
                 if (id > max) {
                     max = id;
                 }
             }
         } catch (IOException e) {
-            // this is expected if database is empty (file does not exists)
+            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
         }
         return max;
     }

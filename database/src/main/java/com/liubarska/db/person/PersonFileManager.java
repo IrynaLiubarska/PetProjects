@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.liubarska.db.Constants.*;
+
 
 /**
  * Created by Iryna on 03.07.2018.
@@ -17,17 +19,17 @@ public class PersonFileManager {
         try (BufferedReader br = new BufferedReader(new FileReader(PERSON_FILE))) {
             String currentRecord;
             while ((currentRecord = br.readLine()) != null) {
-                String[] fields = currentRecord.split(", ");
+                String[] fields = currentRecord.split(FIELD_SEPARATOR);
                 String id = fields[0];
                 if (id.equals(Integer.toString(personId))) {
                     record = currentRecord;
-                    if (fields[1].equals("DELETE")) {
+                    if (fields[1].equals(TOMBSTONE)) {
                         return null;
                     }
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("Can not read file");
+            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
         }
         return record;
     }
@@ -37,14 +39,14 @@ public class PersonFileManager {
         try (BufferedReader br = new BufferedReader(new FileReader(PERSON_FILE))) {
             String currentRecord;
             while ((currentRecord = br.readLine()) != null) {
-                String[] fields = currentRecord.split(", ");
+                String[] fields = currentRecord.split(FIELD_SEPARATOR);
                 String surname = fields[1];
                 if (surname.equals(wantedSurname)) {
                     records.add(currentRecord);
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to get by surname");
+            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
         }
         return records;
     }
@@ -54,15 +56,19 @@ public class PersonFileManager {
             bw.write(record);
             bw.newLine();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to write in File");
+            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
         }
+    }
+
+    public void delete(Integer id) {
+        writeToFile(Integer.toString(id) + ", TOMBSTONE");
     }
 
     public void makeEmpty() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(PERSON_FILE, false))) {
             bw.write("");
         } catch (IOException e) {
-            throw new RuntimeException("Failed to remove all elements");
+            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
         }
     }
 
@@ -71,14 +77,14 @@ public class PersonFileManager {
         try (BufferedReader br = new BufferedReader(new FileReader(PERSON_FILE))) {
             String currentLine;
             while ((currentLine = br.readLine()) != null) {
-                String[] line = currentLine.split(", ");
+                String[] line = currentLine.split(FIELD_SEPARATOR);
                 Integer id = Integer.parseInt(line[0]);
                 if (id > max) {
                     max = id;
                 }
             }
         } catch (IOException e) {
-            // this is expected if database is empty (file does not exists)
+            throw new RuntimeException(FAILED_TO_ACCESS_FILE);
         }
         return max;
     }

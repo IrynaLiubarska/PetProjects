@@ -17,7 +17,7 @@ public class DeleteStrategyFactory {
         } else if (deletePolicy.equals(DeletePolicy.DELETE_CASCADE)) {
             return new DeleteCascade(contactDao);
         } else {
-            throw new NoSuchElementException("there is no delete policy");
+            throw new NoSuchElementException("Unknown delete policy");
         }
     }
 }

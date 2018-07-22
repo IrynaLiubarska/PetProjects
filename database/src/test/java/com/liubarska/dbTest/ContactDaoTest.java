@@ -14,6 +14,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
 
 /**
  * Created by Iryna on 06.07.2018.
@@ -66,6 +67,20 @@ public class ContactDaoTest {
     }
 
     @Test(expected = NullPointerException.class)
+    public void shouldThrowExceptionWhenGetNullId() {
+        contactDao.getById(null);
+    }
+
+
+    @Test
+    public void shouldGetContactById() {
+        personDao.insert(firstPerson);
+        contactDao.insert(firstContact);
+
+        assertEquals(firstContactExpected, contactDao.getById(firstContact.getId()));
+    }
+    
+    @Test(expected = NullPointerException.class)
     public void shouldThrowExceptionWhenGetNullPersonId() {
         contactDao.getByPersonId(null);
     }
@@ -80,7 +95,7 @@ public class ContactDaoTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void shouldThrowExceptionWhenPersonDoesNotExists() {
+    public void shouldThrowExceptionByInsertionWhenPersonDoesNotExists() {
         contactDao.insert(firstContact);
     }
 
@@ -94,13 +109,23 @@ public class ContactDaoTest {
         assertEquals(emptyList(), contactDao.getByPersonId(firstPerson.getId()));
     }
 
+    @Test
+    public void shouldReturnNullWhenContactIsDeleted() {
+        personDao.insert(firstPerson);
+        contactDao.insert(firstContact);
+
+        contactDao.deleteById(firstContact.getId());
+      
+        assertNull(contactDao.getById(firstContact.getId()));
+    }
+
     @Test(expected = NullPointerException.class)
-    public void shouldThrowExceptionWhenDeleteNullId(){
+    public void shouldThrowExceptionWhenDeleteNullId() {
         contactDao.deleteById(null);
     }
 
     @Test(expected = RuntimeException.class)
-    public void shouldThrowExceptionWhenDeleteIdThatIsNotPresentInDatabase(){
+    public void shouldThrowExceptionWhenDeleteIdThatIsNotPresentInDatabase() {
         contactDao.deleteById(firstContact.getId());
     }
 }

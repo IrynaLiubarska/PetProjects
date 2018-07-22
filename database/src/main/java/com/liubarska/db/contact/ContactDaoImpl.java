@@ -33,6 +33,15 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
+    public Contact getById(@NonNull Integer id) {
+        String record = contactFileManager.readById(id);
+        if (record != null) {
+            return contactDeserializer.deserialize(record);
+        }
+        return null;
+    }
+
+    @Override
     public List<Contact> getByPersonId(@NonNull Integer id) {
         List<Contact> contacts = new ArrayList<>();
         List<String> records = contactFileManager.readByPersonId(Integer.toString(id));

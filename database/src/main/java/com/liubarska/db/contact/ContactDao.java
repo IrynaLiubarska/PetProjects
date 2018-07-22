@@ -8,6 +8,8 @@ import java.util.List;
 public interface ContactDao {
 
     void insert(Contact contact);
+    
+    Contact getById(Integer id);
 
     List<Contact> getByPersonId(Integer personId);
 

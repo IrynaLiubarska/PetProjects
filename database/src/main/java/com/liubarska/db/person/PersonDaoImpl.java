@@ -34,7 +34,7 @@ public class PersonDaoImpl implements PersonDao {
             String record = createRecord(person);
             personFileManager.writeToFile(record);
         } else {
-            throw new IllegalArgumentException("person id should be null");
+            throw new IllegalArgumentException("Person id should be null");
         }
     }
 
@@ -63,10 +63,10 @@ public class PersonDaoImpl implements PersonDao {
     public void delete(@NonNull Integer id) {
         Person person = getById(id);
         if (person == null) {
-            throw new RuntimeException("There is no such person"); 
+            throw new RuntimeException("There is no person with such id"); 
         }
         deleteStrategy.delete(id);
-        personFileManager.writeToFile(Integer.toString(id) + ", DELETE");
+        personFileManager.delete(id); 
     }
 
     private String createRecord(Person person) {
