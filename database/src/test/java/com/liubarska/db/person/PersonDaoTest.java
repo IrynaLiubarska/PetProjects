@@ -1,11 +1,14 @@
 package com.liubarska.db.person;
 
 
-import com.liubarska.db.person.Person;
-import com.liubarska.db.person.PersonDao;
-import com.liubarska.db.person.PersonDaoImpl;
+import com.liubarska.db.common.AllConfiguration;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,8 +22,12 @@ import static junit.framework.TestCase.assertNull;
 /**
  * Created by Iryna on 04.07.2018.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {AllConfiguration.class})
 public class PersonDaoTest {
-
+ 
+    @Autowired
+    @Qualifier("deleteNoAction")
     private PersonDao personDao;
     private Person firstPerson;
     private Person secondPerson;
@@ -36,7 +43,6 @@ public class PersonDaoTest {
     }
 
     private void prepareDao() {
-        personDao = new PersonDaoImpl();
         personDao.deleteAll();
     }
 

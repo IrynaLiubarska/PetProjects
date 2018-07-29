@@ -1,6 +1,7 @@
 package com.liubarska.db.person;
 
 import com.liubarska.db.common.FileManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -18,8 +19,10 @@ import static com.liubarska.db.common.Constants.FIELD_SEPARATOR;
 public class PersonFileManager extends FileManager {
 
     private final static String PERSON_FILE = "personalData.txt";
-    private PersonSerializer personSerializer = new PersonSerializer();
-    private PersonDeserializer personDeserializer = new PersonDeserializer();
+    @Autowired
+    private PersonSerializer personSerializer;
+    @Autowired
+    private PersonDeserializer personDeserializer;
 
 
     public PersonFileManager() {

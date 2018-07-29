@@ -1,14 +1,14 @@
 package com.liubarska.db.contact;
 
-import com.liubarska.db.contact.Contact;
-import com.liubarska.db.contact.ContactDao;
-import com.liubarska.db.contact.ContactDaoImpl;
-import com.liubarska.db.contact.ContactType;
+import com.liubarska.db.common.AllConfiguration;
 import com.liubarska.db.person.Person;
 import com.liubarska.db.person.PersonDao;
-import com.liubarska.db.person.PersonDaoImpl;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -19,9 +19,13 @@ import static junit.framework.TestCase.assertNull;
 /**
  * Created by Iryna on 06.07.2018.
  */
-public class ContactDaoTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes ={AllConfiguration.class})
+    public class ContactDaoTest {
 
+    @Autowired
     private ContactDao contactDao;
+    @Autowired
     private PersonDao personDao;
 
     private Person firstPerson;
@@ -37,11 +41,7 @@ public class ContactDaoTest {
     }
 
     private void prepareDao() {
-        personDao = new PersonDaoImpl();
         personDao.deleteAll();
-
-        contactDao = new ContactDaoImpl();
-        ((ContactDaoImpl) contactDao).setPersonDao(personDao);
         contactDao.deleteAll();
     }
 
@@ -71,7 +71,6 @@ public class ContactDaoTest {
         contactDao.getById(null);
     }
 
-
     @Test
     public void shouldGetContactById() {
         personDao.insert(firstPerson);
@@ -79,7 +78,7 @@ public class ContactDaoTest {
 
         assertEquals(firstContactExpected, contactDao.getById(firstContact.getId()));
     }
-    
+
     @Test(expected = NullPointerException.class)
     public void shouldThrowExceptionWhenGetNullPersonId() {
         contactDao.getByPersonId(null);
@@ -115,7 +114,7 @@ public class ContactDaoTest {
         contactDao.insert(firstContact);
 
         contactDao.deleteById(firstContact.getId());
-      
+
         assertNull(contactDao.getById(firstContact.getId()));
     }
 

@@ -1,8 +1,12 @@
 package com.liubarska.db.contact;
 
+import com.liubarska.db.common.DaoRegistry;
+import com.liubarska.db.person.Person;
 import com.liubarska.db.person.PersonDao;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -10,12 +14,20 @@ import java.util.List;
  */
 public class ContactDaoImpl implements ContactDao {
 
-    private PersonDao personDao;
-    private ContactFileManager contactFileManager = new ContactFileManager();
+    @Autowired
+    private DaoRegistry daoRegistry;
+    @Autowired
+    private ContactFileManager contactFileManager;
+
+    @PostConstruct
+    public void init() {
+        daoRegistry.put(Contact.class, this);
+    }
 
     @Override
     public void insert(@NonNull Contact contact) {
         Integer personId = contact.getPersonId();
+        PersonDao personDao = (PersonDao) daoRegistry.get(Person.class);
         if (personDao.getById(personId) == null) {
             throw new RuntimeException("There is no person with such id");
         }
@@ -54,9 +66,5 @@ public class ContactDaoImpl implements ContactDao {
                 deleteById(contact.getId());
             }
         }
-    }
-
-    public void setPersonDao(PersonDao personDao) {
-        this.personDao = personDao;
     }
 }

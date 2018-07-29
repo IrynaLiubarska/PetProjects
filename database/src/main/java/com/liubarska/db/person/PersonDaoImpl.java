@@ -1,27 +1,31 @@
 package com.liubarska.db.person;
 
-import com.liubarska.db.contact.ContactDao;
-import com.liubarska.db.delete.DeletePolicy;
+import com.liubarska.db.common.DaoRegistry;
 import com.liubarska.db.delete.DeleteStrategy;
-import com.liubarska.db.delete.DeleteStrategyFactory;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
  * Created by Iryna on 04.07.2018.
  */
 public class PersonDaoImpl implements PersonDao {
-
-    private PersonFileManager personFileManager = new PersonFileManager();
+    
+    @Autowired
+    private PersonFileManager personFileManager;
+    @Autowired
+    private DaoRegistry daoRegistry;
     private DeleteStrategy deleteStrategy;
 
-    public PersonDaoImpl() {
-        this(DeletePolicy.DELETE_NO_ACTION, null);
+    public PersonDaoImpl(DeleteStrategy deleteStrategy){
+        this.deleteStrategy = deleteStrategy;
     }
-
-    public PersonDaoImpl(DeletePolicy deletePolicy, ContactDao contactDao) {
-        deleteStrategy = DeleteStrategyFactory.create(deletePolicy, contactDao);
+    
+    @PostConstruct
+    public void init(){
+        daoRegistry.put(Person.class, this);
     }
 
     @Override

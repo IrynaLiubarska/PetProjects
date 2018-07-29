@@ -1,6 +1,7 @@
 package com.liubarska.db.contact;
 
 import com.liubarska.db.common.FileManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -18,8 +19,10 @@ import static com.liubarska.db.common.Constants.*;
 public class ContactFileManager extends FileManager {
 
     private final static String CONTACT_FILE = "contactData.txt";
-    private ContactSerializer contactSerializer = new ContactSerializer();
-    private ContactDeserializer contactDeserializer = new ContactDeserializer();
+    @Autowired
+    private ContactSerializer contactSerializer;
+    @Autowired
+    private ContactDeserializer contactDeserializer;
 
     public ContactFileManager() {
         super(CONTACT_FILE);
