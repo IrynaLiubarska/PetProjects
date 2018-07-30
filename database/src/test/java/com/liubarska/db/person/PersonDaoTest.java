@@ -1,7 +1,8 @@
 package com.liubarska.db.person;
 
 
-import com.liubarska.db.common.AllConfiguration;
+import com.liubarska.db.configuration.CommonConfiguration;
+import com.liubarska.db.configuration.PersonConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +24,7 @@ import static junit.framework.TestCase.assertNull;
  * Created by Iryna on 04.07.2018.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {AllConfiguration.class})
+@ContextConfiguration(classes = {CommonConfiguration.class, PersonConfiguration.class})
 public class PersonDaoTest {
  
     @Autowired

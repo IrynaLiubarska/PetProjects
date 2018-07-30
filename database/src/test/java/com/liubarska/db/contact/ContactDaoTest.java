@@ -1,6 +1,8 @@
 package com.liubarska.db.contact;
 
-import com.liubarska.db.common.AllConfiguration;
+import com.liubarska.db.configuration.CommonConfiguration;
+import com.liubarska.db.configuration.ContactConfiguration;
+import com.liubarska.db.configuration.PersonConfiguration;
 import com.liubarska.db.person.Person;
 import com.liubarska.db.person.PersonDao;
 import org.junit.Before;
@@ -20,7 +22,7 @@ import static junit.framework.TestCase.assertNull;
  * Created by Iryna on 06.07.2018.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes ={AllConfiguration.class})
+@ContextConfiguration(classes ={CommonConfiguration.class, ContactConfiguration.class, PersonConfiguration.class})
     public class ContactDaoTest {
 
     @Autowired

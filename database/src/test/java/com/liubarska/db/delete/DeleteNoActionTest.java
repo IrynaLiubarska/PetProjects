@@ -1,6 +1,8 @@
 package com.liubarska.db.delete;
 
-import com.liubarska.db.common.AllConfiguration;
+import com.liubarska.db.configuration.CommonConfiguration;
+import com.liubarska.db.configuration.ContactConfiguration;
+import com.liubarska.db.configuration.PersonConfiguration;
 import com.liubarska.db.contact.Contact;
 import com.liubarska.db.contact.ContactDaoImpl;
 import com.liubarska.db.contact.ContactType;
@@ -20,7 +22,7 @@ import static junit.framework.TestCase.assertNull;
  * Created by Iryna on 29.07.2018.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {AllConfiguration.class})
+@ContextConfiguration(classes = {CommonConfiguration.class, ContactConfiguration.class, PersonConfiguration.class})
 public class DeleteNoActionTest {
     private Person firstPerson;
     private Contact firstContact;

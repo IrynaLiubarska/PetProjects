@@ -11,11 +11,11 @@ public class DaoRegistry {
 
     private Map<Class, Dao> classToDao = new HashMap<>();
 
-    public void put(Class value, Dao dao){
-        classToDao.put(value, dao);
+    public void put(Class type, Dao dao){
+        classToDao.put(type, dao);
     }
     
-    public Dao get(Class value){
-        return classToDao.get(value);
+    public Dao get(Class type){
+        return classToDao.get(type);
     }
 }

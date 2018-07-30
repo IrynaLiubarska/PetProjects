@@ -1,6 +1,8 @@
 package com.liubarska.db.delete;
 
-import com.liubarska.db.common.AllConfiguration;
+import com.liubarska.db.configuration.CommonConfiguration;
+import com.liubarska.db.configuration.ContactConfiguration;
+import com.liubarska.db.configuration.PersonConfiguration;
 import com.liubarska.db.contact.Contact;
 import com.liubarska.db.contact.ContactDaoImpl;
 import com.liubarska.db.contact.ContactType;
@@ -22,7 +24,7 @@ import static org.junit.Assert.fail;
  * Created by Iryna on 10.07.2018.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {AllConfiguration.class})
+@ContextConfiguration(classes = {CommonConfiguration.class, ContactConfiguration.class, PersonConfiguration.class})
 public class DeleteRestrictTest {
 
     private Person firstPerson;
