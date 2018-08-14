@@ -37,12 +37,6 @@ public class PersonTest {
     public void shouldThrowExceptionWhenCreatingPersonWithNullCity() {
         new Person("Dmytro", "Liubarskyi", 26, null);
     }
-
-//    @Test
-//    public void shouldSetId(){
-//        defaultPerson.setId(0);
-//        assertEquals(defaultPerson, new Person(0,"Dmytro", "Liubarskyi", 26, "Munich"));
-//    }
     
     @Test
     public void shouldReturnName() {
@@ -53,11 +47,11 @@ public class PersonTest {
     public void shouldReturnLastName() {
         assertEquals("Liubarskyi", defaultPerson.getLastName());
     }
-//    
-//    @Test 
-//    public void shouldReturnAge(){
-//    assertEquals(26, defaultPerson.getAge());
-//    }
+    
+    @Test 
+    public void shouldReturnAge(){
+    assertEquals((Integer) 26, defaultPerson.getAge());
+    }
     
     @Test
     public void shouldReturnCity(){

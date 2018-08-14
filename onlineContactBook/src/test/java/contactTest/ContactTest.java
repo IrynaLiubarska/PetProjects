@@ -20,12 +20,6 @@ public class ContactTest {
         assertEquals(defaultContact, contact);
     }
 
-//    @Test
-//    public  void shouldSetId(){
-//        defaultContact.setId(0);
-//        assertEquals(new Contact(0, 0,  ContactType.SKYPE, "Liubarskyi"), defaultContact);
-//    }
-
     @Test(expected = NullPointerException.class)
     public void shouldThrowExceptionWhenCreatingContactWithNullPerson() {
         new Contact(null, ContactType.SKYPE, "Liubarskyi");
@@ -40,11 +34,5 @@ public class ContactTest {
     public void shouldThrowExceptionWhenCreatingContactWithNullValue() {
         new Contact(defaultPerson, ContactType.SKYPE, null);
     }
-//    
-//    @Test
-//    public void shouldReturnPersonId(){
-//        assertEquals(0, defaultContact.getPersonId());
-//    }
-
-
+    
 }

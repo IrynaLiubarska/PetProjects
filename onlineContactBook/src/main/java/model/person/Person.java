@@ -28,7 +28,6 @@ public class Person {
     @Column(nullable = false)
     private String lastName;
     @NonNull
-    @Getter
     @Column(nullable = false)
     private Integer age;
     @NonNull
