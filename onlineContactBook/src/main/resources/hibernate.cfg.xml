@@ -15,7 +15,7 @@
 
 
         <property name="hibernate.hbm2ddl.auto">create</property>
-        <mapping class="model.Person"/>
-        <mapping class="model.Contact"/>
+        <mapping class="model.person.Person"/>
+        <mapping class="model.contact.Contact"/>
     </session-factory>
 </hibernate-configuration>

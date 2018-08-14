@@ -1,6 +1,8 @@
-import model.Contact;
-import model.ContactType;
-import model.Person;
+package contactTest;
+
+import model.contact.Contact;
+import model.contact.ContactType;
+import model.person.Person;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

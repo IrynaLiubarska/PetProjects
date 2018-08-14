@@ -1,4 +1,4 @@
-package model;
+package model.contact;
 
 /**
  * Created by Iryna on 02.08.2018.

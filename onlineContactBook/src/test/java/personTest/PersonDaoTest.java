@@ -1,5 +1,7 @@
-import model.Person;
-import model.PersonConfiguration;
+package personTest;
+
+import model.person.Person;
+import model.person.PersonConfiguration;
 import model.dao.PersonDao;
 import org.junit.Before;
 import org.junit.Test;

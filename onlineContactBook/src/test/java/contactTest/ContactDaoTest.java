@@ -1,6 +1,12 @@
-import model.*;
+package contactTest;
+
+import model.contact.Contact;
+import model.contact.ContactConfiguration;
+import model.contact.ContactType;
 import model.dao.ContactDao;
 import model.dao.PersonDao;
+import model.person.Person;
+import model.person.PersonConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

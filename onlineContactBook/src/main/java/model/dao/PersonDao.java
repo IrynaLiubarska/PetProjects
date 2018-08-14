@@ -1,6 +1,6 @@
 package model.dao;
 
-import model.Person;
+import model.person.Person;
 
 import java.util.List;
 

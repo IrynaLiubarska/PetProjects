@@ -1,4 +1,4 @@
-package model;
+package model.contact;
 
 import model.dao.ContactDao;
 import model.dao.ContactDaoImplement;

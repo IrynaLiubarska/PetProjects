@@ -1,6 +1,7 @@
-package model;
+package model.person;
 
 import lombok.*;
+import model.contact.Contact;
 
 import javax.persistence.*;
 import java.util.List;

@@ -1,6 +1,6 @@
 package model.dao;
 
-import model.Person;
+import model.person.Person;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;

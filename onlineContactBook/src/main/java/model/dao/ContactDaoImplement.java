@@ -1,6 +1,6 @@
 package model.dao;
 
-import model.Contact;
+import model.contact.Contact;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;

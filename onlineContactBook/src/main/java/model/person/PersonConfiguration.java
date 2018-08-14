@@ -1,4 +1,4 @@
-package model;
+package model.person;
 
 import model.dao.PersonDaoImplement;
 import org.springframework.context.annotation.Bean;
