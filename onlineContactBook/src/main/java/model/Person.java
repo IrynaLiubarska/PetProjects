@@ -2,10 +2,8 @@ package model;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Iryna on 02.08.2018.
@@ -14,7 +12,6 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-
 @Entity
 @Getter
 public class Person {
@@ -34,11 +31,10 @@ public class Person {
     @Column(nullable = false)
     private Integer age;
     @NonNull
-    @Column(nullable = false)
+    @Column(nullable = false) 
     private String city;
-//
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "person")
-//    @Cascade(value = {CascadeType.DELETE})
-//    List<Contact> contacts;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "person", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    private List<Contact> contacts;
 }

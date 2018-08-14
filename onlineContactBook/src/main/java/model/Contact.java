@@ -21,7 +21,7 @@ public class Contact {
     @Column(name = "contact_id", unique = true, nullable = false)
     private Integer id;
     @NonNull
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinColumn(name = "person_id", nullable = false)
     private Person person;
     @NonNull

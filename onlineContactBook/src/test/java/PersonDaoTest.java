@@ -18,8 +18,9 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PersonConfiguration.class})
 public class PersonDaoTest {
+    
     @Autowired
-    PersonDao personDao;
+    private PersonDao personDao;
     private Person firstPerson;
     private Person secondPerson;
     private Person thirdPerson;
@@ -34,7 +35,9 @@ public class PersonDaoTest {
     @Test
     public void shouldInsertPersonInDatabase() {
         personDao.insert(firstPerson);
-        assertEquals(firstPerson, personDao.getById(firstPerson.getId()));
+        Person actual = personDao.getById(firstPerson.getId());
+        assertEquals(firstPerson, actual);
+        assertEquals(0, actual.getContacts().size());
     }
 
     @Test(expected = NullPointerException.class)
@@ -77,7 +80,7 @@ public class PersonDaoTest {
     @Test
     public void shouldDeletePersonById(){
         personDao.insert(thirdPerson);
-        personDao.getById(thirdPerson.getId());
+        personDao.deleteById(thirdPerson.getId());
         assertNull(personDao.getById(thirdPerson.getId()));
     }
 
