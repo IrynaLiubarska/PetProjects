@@ -1,8 +1,8 @@
 package personTest;
 
+import model.dao.PersonDao;
 import model.person.Person;
 import model.person.PersonConfiguration;
-import model.dao.PersonDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertEquals;
 
@@ -70,7 +70,7 @@ public class PersonDaoTest {
     @Test
     public void shouldGetPersonBySurname() {
         personDao.insert(secondPerson);
-        assertEquals(asList(secondPerson), personDao.getBySurname(secondPerson.getLastName()));
+        assertEquals(singletonList(secondPerson), personDao.getBySurname(secondPerson.getLastName()));
     }
     
     @Test
