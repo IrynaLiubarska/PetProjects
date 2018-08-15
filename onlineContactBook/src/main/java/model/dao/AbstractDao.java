@@ -35,7 +35,7 @@ public class AbstractDao<T> {
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
-            e.printStackTrace();
+            throw e;
         } finally {
             session.close();
         }
@@ -51,7 +51,7 @@ public class AbstractDao<T> {
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
-            e.printStackTrace();
+           throw e;
         } finally {
             session.close();
         }
@@ -67,7 +67,7 @@ public class AbstractDao<T> {
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
-            e.printStackTrace();
+            throw e;
         } finally {
             session.close();
         }
@@ -76,16 +76,16 @@ public class AbstractDao<T> {
     public void deleteAll() {
         Session session = getSession();
         Transaction tx = null;
-        List<T> list = null;
+        List<T> entities = null;
         try {
             tx = session.beginTransaction();
-            for (T entity : list = session.createCriteria(Person.class).list()) {
+            for (T entity : entities = session.createCriteria(Person.class).list()) {
                 session.delete(entity);
             }
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
-            e.printStackTrace();
+           throw e;
         } finally {
             session.close();
         }

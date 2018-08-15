@@ -14,7 +14,9 @@ import java.util.List;
  */
 public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
 
-    public PersonDaoImpl(){super(Person.class);}
+    public PersonDaoImpl() {
+        super(Person.class);
+    }
 
     public List<Person> getBySurname(String surname) {
         Session session = getSession();
@@ -28,11 +30,11 @@ public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
-            e.printStackTrace();
+            throw e;
         } finally {
             session.close();
         }
         return list;
     }
-    
+
 }

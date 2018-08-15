@@ -52,7 +52,7 @@ public class ContactDaoImpl extends AbstractDao<Contact> implements ContactDao {
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
-           throw e;
+            throw e;
         } finally {
             session.close();
         }
