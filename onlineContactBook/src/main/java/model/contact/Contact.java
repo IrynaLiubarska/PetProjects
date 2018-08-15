@@ -17,19 +17,22 @@ import javax.persistence.*;
 @Entity
 @Getter
 public class Contact {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     @Column(name = "contact_id", unique = true, nullable = false)
     private Integer id;
+
     @NonNull
-    @ManyToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", nullable = false)
     private Person person;
+
     @NonNull
     @Column(nullable = false)
     private ContactType contactType;
+
     @NonNull
     @Column(nullable = false)
     private String value;
-    
 }

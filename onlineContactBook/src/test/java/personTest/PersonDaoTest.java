@@ -1,5 +1,9 @@
 package personTest;
 
+import model.contact.Contact;
+import model.contact.ContactConfiguration;
+import model.contact.ContactType;
+import model.dao.ContactDao;
 import model.dao.PersonDao;
 import model.person.Person;
 import model.person.PersonConfiguration;
@@ -18,22 +22,24 @@ import static org.junit.Assert.assertEquals;
  * Created by Iryna on 14.08.2018.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {PersonConfiguration.class})
+@ContextConfiguration(classes = {PersonConfiguration.class, ContactConfiguration.class})
 public class PersonDaoTest {
-    
+
     @Autowired
     private PersonDao personDao;
+    @Autowired
+    private ContactDao contactDao;
     private Person firstPerson;
     private Person secondPerson;
     private Person thirdPerson;
 
     @Before
-    public void before(){
+    public void before() {
         firstPerson = new Person("Dmytro", "Liubarskyi", 26, "Munich");
         secondPerson = new Person("Iryna", "Liubarska", 29, "Munich");
         thirdPerson = new Person("Kateryna", "Liubarska", 31, "kyiv");
     }
-    
+
     @Test
     public void shouldInsertPersonInDatabase() {
         personDao.insert(firstPerson);
@@ -66,24 +72,37 @@ public class PersonDaoTest {
     public void shouldThrowExceptionWhenInsertingPersonWithOneNullCity() {
         personDao.insert(new Person("Dmytro", "Liubarskyi", 26, null));
     }
-    
+
     @Test
     public void shouldGetPersonBySurname() {
         personDao.insert(secondPerson);
         assertEquals(singletonList(secondPerson), personDao.getBySurname(secondPerson.getLastName()));
     }
-    
+
     @Test
-    public void shouldDeleteAll(){
+    public void shouldDeleteAll() {
         personDao.deleteAll();
         assertNull(personDao.getById(firstPerson.getId()));
     }
-    
+
     @Test
-    public void shouldDeletePersonById(){
+    public void shouldDeletePersonById() {
         personDao.insert(thirdPerson);
         personDao.deleteById(thirdPerson.getId());
         assertNull(personDao.getById(thirdPerson.getId()));
     }
 
+    @Test
+    public void shouldGetPersonWithAllContacts() {
+        Person person = new Person("Dmytro", "Liubarskyi", 26, "Munich");
+        Contact contact = new Contact(person, ContactType.SKYPE, "Liubarskyi");
+        person.setContacts(singletonList(contact));
+
+        personDao.insert(person);
+        Person actual = personDao. getById(person.getId());
+
+        assertEquals(1, actual.getContacts().size());
+        assertEquals(contact, actual.getContacts().get(0));
+    }
+    
 }

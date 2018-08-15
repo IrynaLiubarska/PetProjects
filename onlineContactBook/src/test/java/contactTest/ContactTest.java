@@ -11,6 +11,7 @@ import static org.junit.Assert.assertEquals;
  * Created by Iryna on 02.08.2018.
  */
 public class ContactTest {
+   
     private Person defaultPerson = new Person("Dmytro", "Liubarskyi", 26, "Munich");
     private Contact defaultContact = new Contact(defaultPerson, ContactType.SKYPE, "Liubarskyi");
 
