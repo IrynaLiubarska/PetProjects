@@ -13,46 +13,46 @@ import java.util.List;
 /**
  * Created by Iryna on 05.08.2018.
  */
-public class ContactDaoImplement extends AbstractDao<Contact> implements ContactDao {
+public class ContactDaoImpl extends AbstractDao<Contact> implements ContactDao {
 
-    public ContactDaoImplement() {
+    public ContactDaoImpl() {
         super(Contact.class);
     }
 
     public List<Contact> getByPersonId(Integer personId) {
         Session session = getSession();
         Transaction tx = null;
-        List list = null;
+        List<Contact> contacts = null;
         try {
             tx = session.beginTransaction();
             Criteria cr = session.createCriteria(Contact.class);
-            Criterion contactWithThisPersonId = Restrictions.eq("person_id", personId);
-            list = cr.add(contactWithThisPersonId).list();
+            Criterion contactWithThisPersonId = Restrictions.eq("person.id", personId);
+            contacts = cr.add(contactWithThisPersonId).list();
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
-            e.printStackTrace();
+            throw e;
         } finally {
             session.close();
         }
-        return list;
+        return contacts;
     }
 
     public void deleteByPersonId(Integer personId) {
         Session session = getSession();
         Transaction tx = null;
-        List list = null;
+        List<Contact> contacts = null;
         try {
             tx = session.beginTransaction();
             Criteria cr = session.createCriteria(Contact.class);
-            Criterion contactWithThisPersonId = Restrictions.eq("person_id", personId);
-            for (Object contact : list = cr.add(contactWithThisPersonId).list()) {
+            Criterion contactWithThisPersonId = Restrictions.eq("person.id", personId);
+            for (Object contact : contacts = cr.add(contactWithThisPersonId).list()) {
                 session.delete(contact);
             }
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
-            e.printStackTrace();
+           throw e;
         } finally {
             session.close();
         }

@@ -1,7 +1,7 @@
 package model.contact;
 
 import model.dao.ContactDao;
-import model.dao.ContactDaoImplement;
+import model.dao.ContactDaoImpl;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Bean;
 public class ContactConfiguration {
     @Bean
     public ContactDao contactDao(){
-        return new ContactDaoImplement();
+        return new ContactDaoImpl();
     }
 }

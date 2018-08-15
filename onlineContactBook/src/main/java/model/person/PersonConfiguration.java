@@ -1,6 +1,6 @@
 package model.person;
 
-import model.dao.PersonDaoImplement;
+import model.dao.PersonDaoImpl;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
  */
 public class PersonConfiguration {
     @Bean
-    public PersonDaoImplement personDao() {
-        return new PersonDaoImplement();
+    public PersonDaoImpl personDao() {
+        return new PersonDaoImpl();
     }
 }

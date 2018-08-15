@@ -12,9 +12,9 @@ import java.util.List;
 /**
  * Created by Iryna on 05.08.2018.
  */
-public class PersonDaoImplement extends AbstractDao<Person> implements PersonDao {
+public class PersonDaoImpl extends AbstractDao<Person> implements PersonDao {
 
-    public PersonDaoImplement(){super(Person.class);}
+    public PersonDaoImpl(){super(Person.class);}
 
     public List<Person> getBySurname(String surname) {
         Session session = getSession();
