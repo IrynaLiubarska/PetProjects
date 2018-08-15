@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertEquals;
@@ -23,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ContactConfiguration.class, PersonConfiguration.class})
 public class ContactDaoTest {
+    
     @Autowired
     private ContactDao contactDao;
     @Autowired
@@ -35,20 +37,33 @@ public class ContactDaoTest {
     @Test
     public void shouldInsertContactToDatabase() {
         contactDao.insert(firstContact);
+
         assertEquals(firstContact, contactDao.getById(firstContact.getId()));
     }
 
     @Test
     public void shouldDeleteAllContactFromDatabase() {
         contactDao.insert(firstContact);
+
         contactDao.deleteAll();
+
         assertNull(contactDao.getById(firstContact.getId()));
     }
 
     @Test
-    public void shouldGetContactByPersonID() {
+    public void shouldGetContactByPersonId() {
         contactDao.insert(firstContact);
+
         assertEquals(singletonList(firstContact), contactDao.getByPersonId(firstPerson.getId()));
+    }
+
+    @Test
+    public void shouldDeleteContactsByPersonId() {
+        contactDao.insert(firstContact);
+
+        contactDao.deleteByPersonId(firstPerson.getId());
+
+        assertEquals(emptyList(), contactDao.getByPersonId(firstPerson.getId()));
     }
 
 }
