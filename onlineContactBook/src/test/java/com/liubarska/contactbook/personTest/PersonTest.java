@@ -1,6 +1,6 @@
-package personTest;
+package com.liubarska.contactbook.personTest;
 
-import model.person.Person;
+import com.liubarska.contactbook.model.person.Person;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

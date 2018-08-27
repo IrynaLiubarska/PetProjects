@@ -1,4 +1,4 @@
-package model.dao;
+package com.liubarska.contactbook.model.dao;
 
 /**
  * Created by Iryna on 02.08.2018.

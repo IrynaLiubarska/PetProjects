@@ -1,6 +1,6 @@
-package model.person;
+package com.liubarska.contactbook.model.person;
 
-import model.dao.PersonDaoImpl;
+import com.liubarska.contactbook.model.dao.PersonDaoImpl;
 import org.springframework.context.annotation.Bean;
 
 /**

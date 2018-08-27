@@ -1,6 +1,6 @@
-package model.dao;
+package com.liubarska.contactbook.model.dao;
 
-import model.contact.Contact;
+import com.liubarska.contactbook.model.contact.Contact;
 
 import java.util.List;
 

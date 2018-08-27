@@ -1,7 +1,7 @@
-package model.contact;
+package com.liubarska.contactbook.model.contact;
 
-import model.dao.ContactDao;
-import model.dao.ContactDaoImpl;
+import com.liubarska.contactbook.model.dao.ContactDao;
+import com.liubarska.contactbook.model.dao.ContactDaoImpl;
 import org.springframework.context.annotation.Bean;
 
 /**

@@ -1,12 +1,12 @@
-package personTest;
+package com.liubarska.contactbook.personTest;
 
-import model.contact.Contact;
-import model.contact.ContactConfiguration;
-import model.contact.ContactType;
-import model.dao.ContactDao;
-import model.dao.PersonDao;
-import model.person.Person;
-import model.person.PersonConfiguration;
+import com.liubarska.contactbook.model.contact.Contact;
+import com.liubarska.contactbook.model.contact.ContactConfiguration;
+import com.liubarska.contactbook.model.contact.ContactType;
+import com.liubarska.contactbook.model.dao.ContactDao;
+import com.liubarska.contactbook.model.dao.PersonDao;
+import com.liubarska.contactbook.model.person.Person;
+import com.liubarska.contactbook.model.person.PersonConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

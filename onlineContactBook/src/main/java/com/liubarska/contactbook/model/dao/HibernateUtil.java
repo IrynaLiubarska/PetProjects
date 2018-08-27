@@ -1,4 +1,4 @@
-package model.dao;
+package com.liubarska.contactbook.model.dao;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;

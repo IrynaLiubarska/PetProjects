@@ -1,8 +1,8 @@
-package contactTest;
+package com.liubarska.contactbook.contactTest;
 
-import model.contact.Contact;
-import model.contact.ContactType;
-import model.person.Person;
+import com.liubarska.contactbook.model.contact.Contact;
+import com.liubarska.contactbook.model.contact.ContactType;
+import com.liubarska.contactbook.model.person.Person;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

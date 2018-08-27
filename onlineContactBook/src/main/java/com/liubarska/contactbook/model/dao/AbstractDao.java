@@ -1,6 +1,6 @@
-package model.dao;
+package com.liubarska.contactbook.model.dao;
 
-import model.person.Person;
+import com.liubarska.contactbook.model.person.Person;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
