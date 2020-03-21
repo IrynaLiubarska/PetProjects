@@ -1,0 +1,5 @@
+id, name, amount, unit
+1, Cucumber, 3, kg
+2, Tomato, 4, kg
+3, Feta, 5, package
+4, Onion, 1, piece
