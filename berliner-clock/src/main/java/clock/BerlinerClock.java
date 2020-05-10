@@ -39,9 +39,7 @@ public class BerlinerClock {
         List<TimeBlock> representation5HoursIntervals = createTimeBlocksFor5hInterval();
         int lessThan5HoursTime = hours % 5;
         int intervalsWith5Hours = hours / 5;
-        if (lessThan5HoursTime != 0) {
-            representEach1hHours(lessThan5HoursTime);
-        }
+        if (lessThan5HoursTime != 0)     representEach1hHours(lessThan5HoursTime);
         if (intervalsWith5Hours != 0) {
             for (int i = 0; i < intervalsWith5Hours; i++) {
                 representation5HoursIntervals.get(i).setLighted(true);
@@ -65,9 +63,7 @@ public class BerlinerClock {
         List<TimeBlock> representation5MinutesIntervals = createTimeBlocksFor5MinutesInterval();
         int lessThan5MinutesTime = minutes % 5;
         int intervalsWith5Minutes = minutes / 5;
-        if (lessThan5MinutesTime != 0) {
-            representEach1Minutes(lessThan5MinutesTime);
-        }
+        if (lessThan5MinutesTime != 0)      representEach1Minutes(lessThan5MinutesTime);
         if (intervalsWith5Minutes != 0) {
             for (int i = 0; i < intervalsWith5Minutes; i++) {
                 representation5MinutesIntervals.get(i).setLighted(true);
