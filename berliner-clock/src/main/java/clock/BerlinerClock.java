@@ -64,6 +64,7 @@ public class BerlinerClock {
         int lessThan5MinutesTime = minutes % 5;
         int intervalsWith5Minutes = minutes / 5;
         if (lessThan5MinutesTime != 0)      representEach1Minutes(lessThan5MinutesTime);
+        if (lessThan5MinutesTime != 0)             representEach1Minutes(lessThan5MinutesTime);
         if (intervalsWith5Minutes != 0) {
             for (int i = 0; i < intervalsWith5Minutes; i++) {
                 representation5MinutesIntervals.get(i).setLighted(true);
